@@ -50,6 +50,10 @@
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terrain.cs" />
+    <Compile Include="TravellingSalesman\AutoMutate.cs" />
+    <Compile Include="TravellingSalesman\AutoMutateFactor.cs" />
+    <Compile Include="TravellingSalesman\Algorithm.cs" />
+    <Compile Include="TravellingSalesman\SimpleOperator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
