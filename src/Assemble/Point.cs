@@ -10,7 +10,6 @@ namespace Assemble
         public int I { get; set; }
         public int J { get; set; }
         public Terrain Terrain { get; set; }
-        public Character Character  { get; set; }
 
         public Point(int i, int j, Terrain terrain)
         {
