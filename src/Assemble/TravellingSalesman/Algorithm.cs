@@ -23,7 +23,7 @@
     {
         private const int genesCount = 6;
         private const int popCount = 200;
-        private const int crossoverProb = 0.8;
+        private const double crossoverProb = 0.8;
         private static List<Character> _characters;
 
         private static void Execute(Map map)
