@@ -45,7 +45,7 @@ namespace Assemble
         private void BuildTerrain (IList<int> terrain){
             for (int x = 0, i = 0; i < Width; i++)
             {
-                for (int j = 0; j < Height; x++, j++) {
+                for (var j = 0; j < Height; x++, j++) {
                     this.Points[i, j] = new Point(i, j, (Terrain)terrain.ElementAt(x));
                 } 
             }
@@ -58,102 +58,25 @@ namespace Assemble
 
         public IList<Point> GetNeighbors(Point point)
         {
-            //TODO: modificar esse metodo
             var neighbors = new List<Point>();
 
-            switch (WichBorder(point))
-            {
-                case 0: neighbors.Add(this.Points[point.I - 1, point.J]);
-                        neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        neighbors.Add(this.Points[point.I, point.J - 1]);
-                        break;
-                case 1: neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        break;
-                case 2: neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        neighbors.Add(this.Points[point.I, point.J - 1]);
-                        break;
-                case 3: neighbors.Add(this.Points[point.I - 1, point.J]);
-                        neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        neighbors.Add(this.Points[point.I, point.J - 1]);
-                        break;
-                case 4: neighbors.Add(this.Points[point.I - 1, point.J]);
-                        neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        neighbors.Add(this.Points[point.I, point.J - 1]);
-                        break;
-                case 5: neighbors.Add(this.Points[point.I - 1, point.J]);
-                        neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        neighbors.Add(this.Points[point.I, point.J - 1]);
-                        break;
-                case 6: neighbors.Add(this.Points[point.I - 1, point.J]);
-                        neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        neighbors.Add(this.Points[point.I, point.J - 1]);
-                        break;
-                case 7: neighbors.Add(this.Points[point.I - 1, point.J]);
-                        neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        neighbors.Add(this.Points[point.I, point.J - 1]);
-                        break;
-                case 8: neighbors.Add(this.Points[point.I - 1, point.J]);
-                        neighbors.Add(this.Points[point.I + 1, point.J]);
-                        neighbors.Add(this.Points[point.I, point.J + 1]);
-                        neighbors.Add(this.Points[point.I, point.J - 1]);
-                        break;
-            } 
-
-
+            // não está na primeira coluna
+            if (point.J != 0)
+                neighbors.Add(Points[point.I, point.J - 1]);
             
-
+            // não está na ultima coluna
+            if (point.J != 41)
+                neighbors.Add(Points[point.I, point.J + 1]);
+            
+            // não está na primeira linha
+            if (point.I != 0)
+                neighbors.Add(Points[point.I - 1, point.J]);
+            
+            // não está na ultima linha
+            if (point.I != 41)
+                neighbors.Add(Points[point.I + 1, point.J]);
+            
             return neighbors;
-        }
-
-        private int WichBorder(Point point)
-        {
-            // primeira linha
-            if (point.I == 0)
-            {
-                if (point.J == 0)
-                    return 1;
-                if (point.J == 41)
-                    return 3;
-                
-                return 2;
-            }
-
-            // ultima coluna
-            if (point.J == 41)
-            {
-                if (point.I == 41)
-                    return 5;
-
-                return 4;
-            }
-
-            // ultima linha       
-            if (point.I == 41)
-            {
-                if (point.J == 0)
-                    return 7;
-                
-                return 6;
-            }
-
-            // primera coluna
-            if (point.J == 0)
-            {
-                if (point.I == 41)
-                    return 7;
-
-                return 8;
-            }
-
-            return 0;
         }
     }
 }
