@@ -47,7 +47,7 @@ namespace Assemble.AStar
             inBorder.Initialize();
 
             var father = new Element(0, initialPostion);
-            heapBorder.HeapAdd(H(initialPostion, finalPosition), father);
+            heapBorder.HeapAdd(Heuristic(initialPostion, finalPosition), father);
             
             while (heapBorder.HeapSize() > 0)
             {
@@ -72,7 +72,7 @@ namespace Assemble.AStar
 
                     if (inBorder[child.J, child.I] == false || accChild < father.AccCost)
                     {
-                        heapBorder.HeapAdd(H(child, finalPosition) + accChild, 
+                        heapBorder.HeapAdd(Heuristic(child, finalPosition) + accChild, 
                                                 new Element(accChild, child, father.Pos));
                         inBorder[child.J, child.I] = true;
                     }
@@ -104,7 +104,8 @@ namespace Assemble.AStar
             return pathReturn.Skip(1).ToList();
         }
 
-        public int H(Point posIni, Point posFin)
+        // TODO: better name for this method
+        private static int Heuristic(Point posIni, Point posFin)
         {
             var jIni = posIni.J;
             var iIni = posIni.I;
