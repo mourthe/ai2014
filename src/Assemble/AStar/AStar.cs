@@ -29,58 +29,51 @@ namespace Assemble.AStar
 
         public AStar(Map graph)
         {
-            /* initialize the array with infinity distance */
             _dist = Enumerable.Repeat(int.MaxValue, _qtdNodes).ToArray();
             _path = Enumerable.Repeat(int.MinValue, _qtdNodes).ToArray();
             _graph = graph;
             _qtdNodes = Map.Height * Map.Width;
         }
 
-        private void SetNewDistance(int v, int u, int w)
-        {
-            if (_dist[u] <= _dist[v] + w) return;
-            
-            /* we pass by v to get to u */
-            _dist[u] = _dist[v] + w;
-            _path[u] = v;
-        }
-
-        public ICollection<Point> Star(Point posIni, Point posFinal, out int totalCost)
+        public ICollection<Point> Star(Point initialPostion, Point finalPosition, out int totalCost)
         {
             var heapBorder = new Heap<Element>();
             var explored = new List<Element>();
 
             /* Array to verify if a position was explored */
-            var hasExpl = new bool[_qtdNodes, _qtdNodes];
+            var hasExplored = new bool[_qtdNodes, _qtdNodes];
             var inBorder = new bool[_qtdNodes, _qtdNodes];
-            hasExpl.Initialize();
+            hasExplored.Initialize();
             inBorder.Initialize();
 
-            var father = new Element(0, posIni);
-            heapBorder.HeapAdd(H(posIni, posFinal), father);
+            var father = new Element(0, initialPostion);
+            heapBorder.HeapAdd(H(initialPostion, finalPosition), father);
             
             while (heapBorder.HeapSize() > 0)
             {
                 father = heapBorder.HeapExtractMin().Item3;
                 inBorder[father.Pos.J, father.Pos.I] = false;
                 
-                if (father.Pos.Equals(posFinal))
+                // sai do while, chegou no final
+                if (father.Pos.Equals(finalPosition))
                     break;
 
+                // pai é marcado como visitado
                 explored.Insert(0, father);
-                hasExpl[father.Pos.J, father.Pos.I] = true;
-
-                foreach (var child in _graph.GetNeighbors(posFinal))
+                hasExplored[father.Pos.J, father.Pos.I] = true;
+                
+                foreach (var child in _graph.GetNeighbors(finalPosition))
                 {
                     var accChild = 0;
                     accChild = father.AccCost + 1;
 
-                    if (hasExpl[child.J, child.I] && accChild >= father.AccCost)
+                    if (hasExplored[child.J, child.I] && accChild >= father.AccCost)
                         continue;
 
                     if (inBorder[child.J, child.I] == false || accChild < father.AccCost)
                     {
-                        heapBorder.HeapAdd(H(child, posFinal) + accChild, new Element(accChild, child, father.Pos));
+                        heapBorder.HeapAdd(H(child, finalPosition) + accChild, 
+                                                new Element(accChild, child, father.Pos));
                         inBorder[child.J, child.I] = true;
                     }
                 }
@@ -90,23 +83,25 @@ namespace Assemble.AStar
             pathReturn.Insert(0, father.Pos);
             totalCost = father.AccCost;
 
-            if (!father.Parent.HasValue)
+            if (father.Parent == null)
                 return pathReturn;
 
-            var currParent = father.Parent.Value;
+            var currentParent = father.Parent;
             
+            // transcreve o melhor caminho para ser retornado
             for (int i = 0, j = 1; i < explored.Count; i++)
             {
-                if (explored[i].Pos.Equals(currParent))
+                if (explored[i].Pos.Equals(currentParent))
                 {
                     pathReturn.Insert(j, explored[i].Pos);
                     j++;
-                    currParent = explored[i].Parent.HasValue ? explored[i].Parent.Value : posIni;
+                    currentParent = explored[i].Parent ?? initialPostion;
                 }
             }
-            pathReturn.Reverse();
-            return pathReturn.Skip(1).ToList();
 
+            pathReturn.Reverse();
+
+            return pathReturn.Skip(1).ToList();
         }
 
         public int H(Point posIni, Point posFin)
@@ -116,12 +111,8 @@ namespace Assemble.AStar
             var jFin = posFin.J;
             var iFin = posFin.I;
 
+            // distancia entre dois pontos
             return (int)Math.Sqrt(Math.Pow((jIni - jFin), 2) + Math.Pow((iIni - iFin), 2));
-        }
-
-        private Terrain GetTerrainFromPos(Point pos)
-        {
-            return _graph.Points[pos.I, pos.J].Terrain;
         }
     }
 }
