@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,18 +11,20 @@ namespace Assemble
     {
         public Point[,] Points { get; set; }
         public IList<Character> Characters { get; set; }
+        
         public static readonly int Height = 42;
         public static readonly int Width = 42;
+        private readonly int _size;
 
-        public Map(IList<int> terrain, IList<Character> characters)
-        { 
-            this.Points = new Point[Width, Height];
+        public Map(IList<int> terrain, IList<Character> characters, int size = 42) 
+        {
+            _size = size;
+            this.Points = new Point[_size, _size];
             this.BuildTerrain(terrain);
             this.Characters = this.CreateCharacters(characters);
             //Mapa tá pronto, vc tem o mapa!
-
         }
-
+        
         private IList<Character> CreateCharacters(IList<Character> characters)
         {
             int numberOfavengers = 0; 
@@ -31,7 +34,7 @@ namespace Assemble
             {
                 foreach (var character in characters)
                 {
-                    if (numberOfavengers < 3 && random.Next(1, 2) % 2 == 0)
+                    if (numberOfavengers < 3 && random.NextDouble() > 0.5)
                     {
                         character.isConvincible = true;
                         numberOfavengers++;
@@ -43,9 +46,10 @@ namespace Assemble
         }
 
         private void BuildTerrain (IList<int> terrain){
-            for (int x = 0, i = 0; i < Width; i++)
+            for (int x = 0, i = 0; i < _size; i++)
             {
-                for (var j = 0; j < Height; x++, j++) {
+                for (var j = 0; j < _size; x++, j++)
+                {
                     this.Points[i, j] = new Point(i, j, (Terrain)terrain.ElementAt(x));
                 } 
             }
