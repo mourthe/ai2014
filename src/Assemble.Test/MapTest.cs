@@ -11,6 +11,13 @@ namespace Assemble.Test
     public class MapTest
     {
         [Test]
-        public 
+        public void Get_neighboors_should_throw_return_four_points_picking_one_not_in_the_border()
+        {
+            // arrange
+
+            // act
+
+            // assert
+        }
     }
 }
