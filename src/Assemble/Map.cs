@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assemble.AStar;
 
 namespace Assemble
 {
@@ -11,7 +12,8 @@ namespace Assemble
     {
         public Point[,] Points { get; set; }
         public IList<Character> Characters { get; set; }
-        
+        public SearchResult[,] Result { get; set; }
+
         public static readonly int Height = 42;
         public static readonly int Width = 42;
         private readonly int _size;
@@ -19,12 +21,15 @@ namespace Assemble
         public Map(IList<int> terrain, IList<Character> characters, int size = 42) 
         {
             _size = size;
+            this.Result = InitializeResult();
             this.Points = new Point[_size, _size];
             this.BuildTerrain(terrain);
             this.Characters = this.CreateCharacters(characters);
             //Mapa tá pronto, vc tem o mapa!
         }
-        
+
+
+
         private IList<Character> CreateCharacters(IList<Character> characters)
         {
             int numberOfavengers = 0; 
@@ -59,6 +64,29 @@ namespace Assemble
         {
             var filteredNames = this.getThreeConvincedNames(TravellingSalesman.Algorithm.Execute(this));
             return this.getPathInDirections(filteredNames);
+        }
+
+        public IList<Point> GetNeighbors(Point point)
+        {
+            var neighbors = new List<Point>();
+
+            // não está na primeira coluna
+            if (point.J != 0)
+                neighbors.Add(Points[point.I, point.J - 1]);
+
+            // não está na ultima coluna
+            if (point.J != 41)
+                neighbors.Add(Points[point.I, point.J + 1]);
+
+            // não está na primeira linha
+            if (point.I != 0)
+                neighbors.Add(Points[point.I - 1, point.J]);
+
+            // não está na ultima linha
+            if (point.I != 41)
+                neighbors.Add(Points[point.I + 1, point.J]);
+
+            return neighbors;
         }
 
         private IList<string> getPathInDirections(List<string> names)
@@ -111,7 +139,7 @@ namespace Assemble
             return "up";
         }
 
-        private List<Point> getPathInPoints(Point currPos, Point dest)
+        private IEnumerable<Point> getPathInPoints(Point currPos, Point dest)
         {
             //TODO: USAR MATRIZ DE CAMINHO PARA DIZER MELHOR CAMINHO ENTRE currPos e dest (BASEADO NO A*) 
             throw new NotImplementedException();
@@ -141,28 +169,17 @@ namespace Assemble
 
             return filteredNames;
         }
-
-        public IList<Point> GetNeighbors(Point point)
+        
+        private static SearchResult[,] InitializeResult()
         {
-            var neighbors = new List<Point>();
+            var result = new SearchResult[7, 7];
 
-            // não está na primeira coluna
-            if (point.J != 0)
-                neighbors.Add(Points[point.I, point.J - 1]);
-            
-            // não está na ultima coluna
-            if (point.J != 41)
-                neighbors.Add(Points[point.I, point.J + 1]);
-            
-            // não está na primeira linha
-            if (point.I != 0)
-                neighbors.Add(Points[point.I - 1, point.J]);
-            
-            // não está na ultima linha
-            if (point.I != 41)
-                neighbors.Add(Points[point.I + 1, point.J]);
-            
-            return neighbors;
+            for (var i = 0; i < 7; i++)
+            {
+                result[i, i] = new SearchResult(0, null);
+            }
+
+            return result;
         }
     }
 }
