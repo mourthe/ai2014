@@ -63,7 +63,63 @@ namespace Assemble
 
         private IList<string> getPathInDirections(List<string> names)
         {
+            var currPos = new Point(23, 19, this.Points[23, 19].Terrain);
+            var currDest = new Point(0, 0, this.Points[0, 0].Terrain);
+            var steps = new List<string>();
+            foreach (var name in names)
+            {
+                var dest = getPointFromName(name);
+                var path = getPathInPoints(currPos, dest);
+                
+                //Para cada ponto na rota entre a posição atual e o destion, adicionar o step que se deve fazer
+                foreach (var stepDest in path)
+                {
+                    steps.Add(getStep(currPos, stepDest));
+                    currDest = stepDest;
+                }
+
+                //Adiciona step de stop para poder rolar a animação da conversa de convencimento
+                steps.Add("stop");
+                currPos = currDest;
+            }
+
+            return steps;
+        }
+
+        private string getStep(Point currPos, Point dest)
+        {
+            if (dest.I > currPos.I)
+            {
+                return "down";
+            }
+
+            if (dest.I < currPos.I)
+            {
+                return "up";
+            }
+
+            if (dest.J > currPos.J)
+            {
+                return "left";
+            }
+
+            if (dest.J > currPos.J)
+            {
+                return "right";
+            }
+
+            return "up";
+        }
+
+        private List<Point> getPathInPoints(Point currPos, Point dest)
+        {
+            //TODO: USAR MATRIZ DE CAMINHO PARA DIZER MELHOR CAMINHO ENTRE currPos e dest (BASEADO NO A*) 
             throw new NotImplementedException();
+        }
+
+        private Point getPointFromName(string name)
+        {
+            return this.Characters.FirstOrDefault(c => c.Name == name).Position;
         }
 
         private List<string> getThreeConvincedNames(List<string> names)
