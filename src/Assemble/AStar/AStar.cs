@@ -35,7 +35,7 @@ namespace Assemble.AStar
             _qtdNodes = Map.Height * Map.Width;
         }
 
-        public ICollection<Point> Star(Point initialPostion, Point finalPosition, out int totalCost)
+        public SearchResult Star(Point initialPostion, Point finalPosition)
         {
             var heapBorder = new Heap<Element>();
             var explored = new List<Element>();
@@ -81,7 +81,7 @@ namespace Assemble.AStar
 
             var pathReturn = new List<Point>();
             pathReturn.Insert(0, father.Pos);
-            totalCost = father.AccCost;
+            var totalCost = father.AccCost;
 
             if (father.Parent == null)
                 return pathReturn;
@@ -101,7 +101,7 @@ namespace Assemble.AStar
 
             pathReturn.Reverse();
 
-            return pathReturn.Skip(1).ToList();
+            return new SearchResult(totalCost, pathReturn.Skip(1).ToList());
         }
 
         // TODO: better name for this method
