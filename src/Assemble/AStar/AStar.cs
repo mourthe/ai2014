@@ -65,7 +65,7 @@ namespace Assemble.AStar
                 foreach (var child in _graph.GetNeighbors(finalPosition))
                 {
                     var accChild = 0;
-                    accChild = father.AccCost + 1;
+                    accChild = father.AccCost + Convert.ToInt32(child.Terrain.GetCost());
 
                     if (hasExplored[child.J, child.I] && accChild >= father.AccCost)
                         continue;
