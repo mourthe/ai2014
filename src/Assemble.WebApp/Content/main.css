@@ -1,0 +1,24 @@
+﻿.big-btn {
+  width: 350px;
+  height: 176px;
+  vertical-align: middle;
+  margin: 0 auto;
+  background-color: #000;
+  border-radius: 27px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.big-btn:hover {
+  width: 353px;
+  height: 179px;
+  background-color: #404040;
+}
+
+.big-btn img {
+  position: relative;
+  max-width: 80%;
+  max-height: 75%;
+  margin-top: 6%;
+  margin-left: 12%;
+}

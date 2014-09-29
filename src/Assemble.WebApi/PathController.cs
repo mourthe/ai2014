@@ -12,9 +12,11 @@ namespace Assemble.WebApi
     {
         // GET api/<controller>
         // GET api/path
-        public IList<string> GetPath(IList<int> terrain, IList<Character> characters)
+        [HttpPost]
+        public IList<string> Post(GetPathRequest request)
         {
-            return new AssembleService().GetBestPath(terrain, characters); 
+            //return new List<string>(){ "up", "left", "down", "left", "down"};
+            return new AssembleService().GetBestPath(request.Terrain, request.Characters); 
         }
     }
 }

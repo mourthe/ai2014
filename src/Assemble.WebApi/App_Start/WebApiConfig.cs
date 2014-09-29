@@ -11,8 +11,11 @@ namespace Assemble.WebApi
         {
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "api/path",
+                defaults: new {
+                    controller = "Path",
+                    action = "Post"
+                }
             );
         }
     }

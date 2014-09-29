@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Avengers: Assemble!</title>
-    <style>
-    body, html { margin:0; padding: 0; overflow:hidden; font-family:Arial; font-size:20px }
-    #cr-stage { border:2px solid black; margin:5px auto; color:white }
-    </style>
+      <meta charset="utf-8">
+      <title>Avengers: Assemble!</title>
+      <style>
+       body, html { margin:0; padding: 0; overflow:hidden; font-family:Arial; font-size:20px }
+       #cr-stage { border:2px solid black; margin:5px auto; color:white }
+      </style>
+      <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
 
@@ -14,6 +15,7 @@
     <script src="js/source.js"></script>
     <script src="js/create_mocks_module.js"></script>
     <script src="js/tiledmapbuilder.js"></script>
+    <script src="js/jquery-2.1.1.min.js"></script>
 	<script>
   		window.onload = function() {
   			var WIDTH = 840;
@@ -82,10 +84,17 @@
 					})
   			});
 
-            jQuery.event.trigger({ type : 'keypress', which : character.charCodeAt(38) });
-            jQuery.event.trigger({ type : 'keypress', which : character.charCodeAt(38) });
+            //Tentativa de andar
+            //jQuery.event.trigger({ type : 'keypress', which : character.charCodeAt(38) });
+            //jQuery.event.trigger({ type : 'keypress', which : character.charCodeAt(38) });
+
+            $("#assemble").click(function (){
+                console.log("PEIDEEEEEEEEEEEEEi");
+            });
   	}
 	</script>
-	<p align="center">Nick Fury quer juntar os avengers para proteger o mundo.</p>
+      <div id="assemble" class="big-btn">
+          <img src="img/assemble.png"></img>
+      </div>
   </body>
 </html>
