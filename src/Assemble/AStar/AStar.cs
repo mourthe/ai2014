@@ -32,7 +32,8 @@ namespace Assemble.AStar
             _dist = Enumerable.Repeat(int.MaxValue, _qtdNodes).ToArray();
             _path = Enumerable.Repeat(int.MinValue, _qtdNodes).ToArray();
             _graph = graph;
-            _qtdNodes = Map.Height * Map.Width;
+            //_qtdNodes = Map.Height * Map.Width;
+            _qtdNodes = graph.Points.Length;
         }
 
         public SearchResult Star(Point initialPostion, Point finalPosition)
@@ -46,7 +47,7 @@ namespace Assemble.AStar
             hasExplored.Initialize();
             inBorder.Initialize();
 
-            var father = new Element(Convert.ToInt32(initialPostion.Terrain.GetCost()), initialPostion);
+            var father = new Element(initialPostion.Terrain.GetCost(), initialPostion);
             heapBorder.HeapAdd(Heuristic(initialPostion, finalPosition), father);
             
             while (heapBorder.HeapSize() > 0)
@@ -65,7 +66,7 @@ namespace Assemble.AStar
                 foreach (var child in _graph.GetNeighbors(finalPosition))
                 {
                     var accChild = 0;
-                    accChild = father.AccCost + Convert.ToInt32(child.Terrain.GetCost());
+                    accChild = father.AccCost + child.Terrain.GetCost();
 
                     if (hasExplored[child.J, child.I] && accChild >= father.AccCost)
                         continue;

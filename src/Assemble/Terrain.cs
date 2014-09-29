@@ -17,7 +17,7 @@ namespace Assemble
 
     public static class TerrainExtensions
     {
-        public static uint GetCost(this Terrain terrain){
+        public static int GetCost(this Terrain terrain){
             switch (terrain){
                 case Terrain.Asphalt:
                     return 1;
@@ -28,7 +28,7 @@ namespace Assemble
                 case Terrain.Stones:
                     return 10;
                 case Terrain.Building:
-                    return uint.MaxValue;
+                    return int.MaxValue;
                 default:
                     throw new ArgumentOutOfRangeException("Terreno");
             }
