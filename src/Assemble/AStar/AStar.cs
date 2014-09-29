@@ -46,7 +46,7 @@ namespace Assemble.AStar
             hasExplored.Initialize();
             inBorder.Initialize();
 
-            var father = new Element(0, initialPostion);
+            var father = new Element(Convert.ToInt32(initialPostion.Terrain.GetCost()), initialPostion);
             heapBorder.HeapAdd(Heuristic(initialPostion, finalPosition), father);
             
             while (heapBorder.HeapSize() > 0)
@@ -84,7 +84,7 @@ namespace Assemble.AStar
             var totalCost = father.AccCost;
 
             if (father.Parent == null)
-                return pathReturn;
+                return new SearchResult(totalCost, pathReturn); ;
 
             var currentParent = father.Parent;
             

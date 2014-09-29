@@ -1,4 +1,6 @@
-﻿namespace TravellingSalesman
+﻿using System.Runtime.CompilerServices;
+
+namespace TravellingSalesman
 {
     using System;
     using System.Collections.Generic;
@@ -25,9 +27,13 @@
         private const int popCount = 200;
         private const double crossoverProb = 0.8;
         private static List<Character> _characters;
+        private static Map _cMap;
 
         public static List<string> Execute(Map map)
         {
+            // save the map for further use 
+            _cMap = map;
+
             //Each character can be identified by an integer within the range 0-5
             //our chromosome is a special case as it needs to contain each city 
             //only once. Therefore, our chromosome will contain all the integers
@@ -110,6 +116,14 @@
         private static double CalculateDistance(Chromosome chromosome)
         {
             var distanceToTravel = 0.0;
+
+            for (var i = 0; i < chromosome.Genes.Count; i++)
+            {
+                var currentPoint = Convert.ToInt32(chromosome.Genes[i].RealValue);
+                var destinationPoint = Convert.ToInt32(chromosome.Genes[++i].RealValue);
+
+                distanceToTravel += _cMap.Result[currentPoint, destinationPoint].Cost;
+            }
 
             return distanceToTravel;
         }

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AssembleService.cs" />
     <Compile Include="AStar\AStar.cs" />
+    <Compile Include="AStar\SearchResult.cs" />
     <Compile Include="AStar\Sorting.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Map.cs" />

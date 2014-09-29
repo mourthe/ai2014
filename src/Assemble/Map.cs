@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Assemble.AStar;
@@ -18,17 +20,19 @@ namespace Assemble
         public static readonly int Width = 42;
         private readonly int _size;
 
+        /// <summary>
+        /// Construtor da classe Map
+        /// </summary>
+        /// <param name="characters">Lista com todos os personagens inclusive a casa do nick</param>
         public Map(IList<int> terrain, IList<Character> characters, int size = 42) 
         {
             _size = size;
-            this.Result = InitializeResult();
+            this.Result = null;
             this.Points = new Point[_size, _size];
             this.BuildTerrain(terrain);
             this.Characters = this.CreateCharacters(characters);
             //Mapa tá pronto, vc tem o mapa!
         }
-
-
 
         private IList<Character> CreateCharacters(IList<Character> characters)
         {
@@ -63,7 +67,7 @@ namespace Assemble
         public IList<string> GetBestPath()
         {
             var filteredNames = this.getThreeConvincedNames(TravellingSalesman.Algorithm.Execute(this));
-            return this.getPathInDirections(filteredNames);
+            return this.GetPathInDirections(filteredNames);
         }
 
         public IList<Point> GetNeighbors(Point point)
@@ -89,7 +93,7 @@ namespace Assemble
             return neighbors;
         }
 
-        private IList<string> getPathInDirections(List<string> names)
+        private IList<string> GetPathInDirections(List<string> names)
         {
             var currPos = new Point(23, 19, this.Points[23, 19].Terrain);
             var currDest = new Point(0, 0, this.Points[0, 0].Terrain);
@@ -97,12 +101,12 @@ namespace Assemble
             foreach (var name in names)
             {
                 var dest = getPointFromName(name);
-                var path = getPathInPoints(currPos, dest);
+                var path = GetPathInPoints(currPos, dest);
                 
                 //Para cada ponto na rota entre a posição atual e o destion, adicionar o step que se deve fazer
                 foreach (var stepDest in path)
                 {
-                    steps.Add(getStep(currPos, stepDest));
+                    steps.Add(GetStep(currPos, stepDest));
                     currDest = stepDest;
                 }
 
@@ -114,7 +118,7 @@ namespace Assemble
             return steps;
         }
 
-        private string getStep(Point currPos, Point dest)
+        private static string GetStep(Point currPos, Point dest)
         {
             if (dest.I > currPos.I)
             {
@@ -139,10 +143,28 @@ namespace Assemble
             return "up";
         }
 
-        private IEnumerable<Point> getPathInPoints(Point currPos, Point dest)
-        {
-            //TODO: USAR MATRIZ DE CAMINHO PARA DIZER MELHOR CAMINHO ENTRE currPos e dest (BASEADO NO A*) 
-            throw new NotImplementedException();
+        private IEnumerable<Point> GetPathInPoints(Point currPos, Point dest)
+        {   
+            if (this.Result == null)
+            {
+                InitializeResult();
+            }
+
+            int current = 0, destination = 0;
+            for (int i = 0, j = 0; i < this.Characters.Count; i++, j++)
+            {
+                if (currPos.Equals(Characters[i].Position))
+                {
+                    current = i;
+                }
+
+                if (dest.Equals(Characters[j].Position))
+                {
+                    destination = j;
+                }
+            }
+
+            return this.Result[current, destination].BestPath;
         }
 
         private Point getPointFromName(string name)
@@ -157,7 +179,7 @@ namespace Assemble
             foreach (var name in names)
             {
                 filteredNames.Add(name);
-                if (this.Characters.FirstOrDefault(c => c.Name == name).isConvincible == true)
+                if (this.Characters.FirstOrDefault(c => c.Name == name).isConvincible)
                 {
                     count++;
                     if (count == 3)
@@ -170,16 +192,28 @@ namespace Assemble
             return filteredNames;
         }
         
-        private static SearchResult[,] InitializeResult()
+        
+        public void InitializeResult()
         {
             var result = new SearchResult[7, 7];
+            var aStar = new AStar.AStar(this);
 
-            for (var i = 0; i < 7; i++)
+            for (var i = 0; i < this.Characters.Count; i++)
             {
-                result[i, i] = new SearchResult(0, null);
+                for (var j = 0; j < this.Characters.Count; j++)
+                {
+                    if (j != i)
+                    {
+                        Result[i, j] = aStar.Star(Characters[i].Position, Characters[j].Position);
+                    }
+                    else
+                    {
+                        result[i, j] = new SearchResult(0, null);
+                    }
+                }
             }
 
-            return result;
+            this.Result = result;
         }
     }
 }
