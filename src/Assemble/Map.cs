@@ -57,7 +57,33 @@ namespace Assemble
 
         public IList<string> GetBestPath()
         {
+            var filteredNames = this.getThreeConvincedNames(TravellingSalesman.Algorithm.Execute(this));
+            return this.getPathInDirections(filteredNames);
+        }
+
+        private IList<string> getPathInDirections(List<string> names)
+        {
             throw new NotImplementedException();
+        }
+
+        private List<string> getThreeConvincedNames(List<string> names)
+        {
+            var count = 0;
+            List<string> filteredNames = new List<string>();
+            foreach (var name in names)
+            {
+                filteredNames.Add(name);
+                if (this.Characters.FirstOrDefault(c => c.Name == name).isConvincible == true)
+                {
+                    count++;
+                    if (count == 3)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return filteredNames;
         }
 
         public IList<Point> GetNeighbors(Point point)

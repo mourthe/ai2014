@@ -26,7 +26,7 @@
         private const double crossoverProb = 0.8;
         private static List<Character> _characters;
 
-        private static void Execute(Map map)
+        public static List<string> Execute(Map map)
         {
             //Each character can be identified by an integer within the range 0-5
             //our chromosome is a special case as it needs to contain each city 
@@ -65,6 +65,15 @@
             ga.Operators.Add(mutate);
             ga.Run(Terminate);
 
+            var names = new List<string>();
+            var fittest = ga.Population.GetTop(1)[0];
+            foreach (var gene in fittest.Genes)
+            {
+                names.Add(_characters.FirstOrDefault(c => c.Index == (int)gene.RealValue).Name);
+            }
+
+            return names;
+
         }
 
         static void ga_OnRunComplete(object sender, GaEventArgs e)
@@ -74,6 +83,7 @@
             {
                 Console.WriteLine(_characters.FirstOrDefault(c => c.Index == (int)gene.RealValue).Name);
             }
+
         }
 
         private static void ga_OnGenerationComplete(object sender, GaEventArgs e)
@@ -84,7 +94,7 @@
                  
         }
 
-        public static double CalculateFitness(Chromosome chromosome)
+        private static double CalculateFitness(Chromosome chromosome)
         {
             //X' = X * k + d; 
             //k = (B' - A') / (A - B);
