@@ -79,7 +79,7 @@ namespace Assemble
                 neighbors.Add(Points[point.I, point.J - 1]);
 
             // não está na ultima coluna
-            if (point.J != 41)
+            if (point.J != _size - 1)
                 neighbors.Add(Points[point.I, point.J + 1]);
 
             // não está na primeira linha
@@ -87,7 +87,7 @@ namespace Assemble
                 neighbors.Add(Points[point.I - 1, point.J]);
 
             // não está na ultima linha
-            if (point.I != 41)
+            if (point.I != _size - 1)
                 neighbors.Add(Points[point.I + 1, point.J]);
 
             return neighbors;
