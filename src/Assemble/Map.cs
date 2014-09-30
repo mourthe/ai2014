@@ -192,7 +192,6 @@ namespace Assemble
             return filteredNames;
         }
         
-        
         public void InitializeResult()
         {
             var result = new SearchResult[7, 7];
@@ -205,6 +204,8 @@ namespace Assemble
                     if (j != i)
                     {
                         result[i, j] = aStar.Star(Characters[i].Position, Characters[j].Position);
+                        
+                        // matriz é simétrica em relação a diagonal
                         result[j, i] = result[i, j];
                     }
                     else

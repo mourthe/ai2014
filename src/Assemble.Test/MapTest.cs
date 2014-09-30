@@ -143,7 +143,7 @@ namespace Assemble.Test
         #region Result
 
         [Test]
-        public void Result_Matrix_should_be_build()
+        public void Result_Matrix_should_be_build_Correctly()
         {
             // arrange5
             var map = CreateMap(CreateFullCharacters()); 
@@ -155,6 +155,26 @@ namespace Assemble.Test
             Assert.That(map.Result[0, 1].Cost, Is.EqualTo(28));
             Assert.That(map.Result[4, 3].Cost, Is.EqualTo(34));
             Assert.That(map.Result[4, 5].Cost, Is.EqualTo(9));
+            Assert.That(map.Result[0, 3].Cost, Is.EqualTo(23));
+            Assert.That(map.Result[1, 4].Cost, Is.EqualTo(41));
+        }
+
+        [Test]
+        public void Result_Matrix_should_be_build_Correctly_With_the_path()
+        {
+            // arrange5
+            var map = CreateMap(CreateFullCharacters());
+
+            // act
+            map.InitializeResult();
+
+            // assert
+            Assert.That(map.Result[4, 5].Cost, Is.EqualTo(9));
+            Assert.That(map.Result[4, 5].BestPath.Count, Is.EqualTo(4));
+            Assert.That(map.Result[4, 5].BestPath.ElementAt(0).Equals(new Point(8, 2, Terrain.Asphalt)), Is.True);
+            Assert.That(map.Result[4, 5].BestPath.ElementAt(1).Equals(new Point(9, 2, Terrain.Grass)), Is.True);
+            Assert.That(map.Result[4, 5].BestPath.ElementAt(2).Equals(new Point(9, 3, Terrain.Asphalt)), Is.True);
+            Assert.That(map.Result[4, 5].BestPath.ElementAt(3).Equals(new Point(9, 4, Terrain.Asphalt)), Is.True);
         }
 
         #endregion
