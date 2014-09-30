@@ -9,6 +9,22 @@ namespace Assemble
     [DataContract]
     public class Point
     {
+        protected bool Equals(Point other)
+        {
+            return I == other.I && J == other.J && Terrain == other.Terrain;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = I;
+                hashCode = (hashCode*397) ^ J;
+                hashCode = (hashCode*397) ^ (int) Terrain;
+                return hashCode;
+            }
+        }
+
         [DataMember (Name="i")]
         public int I { get; set; }
 
@@ -22,6 +38,13 @@ namespace Assemble
             this.Terrain = terrain;
             this.I = i;
             this.J = j;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == this.GetType() && Equals((Point) obj);
         }
     }
 }
