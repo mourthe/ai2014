@@ -28,7 +28,7 @@ namespace Assemble
                 case Terrain.Stones:
                     return 10;
                 case Terrain.Building:
-                    return int.MaxValue;
+                    return 1000000000;
                 default:
                     throw new ArgumentOutOfRangeException("Terreno");
             }

@@ -33,7 +33,7 @@ namespace Assemble.AStar
             _path = Enumerable.Repeat(int.MinValue, _qtdNodes).ToArray();
             _graph = graph;
             //_qtdNodes = Map.Height * Map.Width;
-            _qtdNodes = graph.Points.Length;
+            _qtdNodes = Convert.ToInt32(Math.Sqrt(graph.Points.Length));
         }
 
         public SearchResult Star(Point initialPostion, Point finalPosition)
@@ -63,7 +63,7 @@ namespace Assemble.AStar
                 explored.Insert(0, father);
                 hasExplored[father.Pos.J, father.Pos.I] = true;
                 
-                foreach (var child in _graph.GetNeighbors(finalPosition))
+                foreach (var child in _graph.GetNeighbors(father.Pos))
                 {
                     var accChild = 0;
                     accChild = father.AccCost + child.Terrain.GetCost();

@@ -14,18 +14,6 @@ namespace Assemble.Test
         public void AStar_should_return_the_best_path()
         {
             // arrange
-            var map = CreateMap();
-            var aStar = new AStar.AStar(map);
-            
-            // act
-            var result = aStar.Star(map.Points[0,0], map.Points[0,3]);
-
-            // assert
-
-        }
-
-        private static Map CreateMap()
-        {
             var terrain = new List<int>
             {
                 171, 495, 495, 101,
@@ -33,8 +21,82 @@ namespace Assemble.Test
                 171, 354, 491, 101,
                 491, 171, 171, 491
             };
+
+            var map = new Map(terrain, CreateCharacters(), 4);
+            var aStar = new AStar.AStar(map);
             
-            return new Map(terrain, CreateCharacters(), 4);
+            // act
+            var result = aStar.Star(map.Points[0,0], map.Points[0,3]);
+
+            // assert
+            Assert.That(result.Cost, Is.EqualTo(31));
+        }
+
+        [Test]
+        public void AStar_should_return_the_best_path_inverted()
+        {
+            // arrange
+            var terrain = new List<int>
+            {
+                171, 495, 495, 101,
+                354, 171, 495, 101,
+                171, 354, 491, 101,
+                491, 171, 171, 491
+            };
+
+            var map = new Map(terrain, CreateCharacters(), 4);
+            var aStar = new AStar.AStar(map);
+
+            // act
+            var result = aStar.Star(map.Points[0, 3], map.Points[0, 0]);
+
+            // assert
+            Assert.That(result.Cost, Is.EqualTo(31));
+        }
+
+        [Test]
+        public void AStar_should_return_the_best_path_just_to_be_sure()
+        {
+            // arrange
+            var terrain = new List<int>
+            {
+                101, 101, 495, 171,
+                101, 495, 495, 171,
+                354, 171, 495, 491,
+                354, 171, 171, 491
+            };
+
+            var map = new Map(terrain, CreateCharacters(), 4);
+            var aStar = new AStar.AStar(map);
+
+            // act
+            var result = aStar.Star(map.Points[0, 1], map.Points[0, 3]);
+
+            // assert
+            Assert.That(result.Cost, Is.EqualTo(39));
+        }
+
+        [Test]
+        public void AStar_should_return_the_best_path_five_by_five()
+        {
+            // arrange
+            var terrain = new List<int>
+            {
+                101, 101, 495, 171, 171,
+                101, 495, 495, 171, 101,
+                354, 171, 495, 491, 101,
+                354, 171, 171, 491, 171,
+                495, 495, 354, 171, 171
+            };
+
+            var map = new Map(terrain, CreateCharacters(), 5);
+            var aStar = new AStar.AStar(map);
+
+            // act
+            var result = aStar.Star(map.Points[0, 1], map.Points[0, 3]);
+
+            // assert
+            Assert.That(result.Cost, Is.EqualTo(33));
         }
 
         private static List<Character> CreateCharacters()
