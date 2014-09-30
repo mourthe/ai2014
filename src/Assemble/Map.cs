@@ -74,20 +74,20 @@ namespace Assemble
         {
             var neighbors = new List<Point>();
 
-            // não está na primeira coluna
-            if (point.J != 0)
+            // não está na primeira coluna e o vizinho não é predio
+            if (point.J != 0 && Points[point.I, point.J - 1].Terrain != Terrain.Building)
                 neighbors.Add(Points[point.I, point.J - 1]);
 
-            // não está na ultima coluna
-            if (point.J != _size - 1)
+            // não está na ultima coluna e o vizinho não é predio
+            if (point.J != _size - 1 && Points[point.I, point.J + 1].Terrain != Terrain.Building)
                 neighbors.Add(Points[point.I, point.J + 1]);
 
-            // não está na primeira linha
-            if (point.I != 0)
+            // não está na primeira linha e o vizinho não é predio
+            if (point.I != 0 && Points[point.I - 1, point.J].Terrain != Terrain.Building)
                 neighbors.Add(Points[point.I - 1, point.J]);
 
-            // não está na ultima linha
-            if (point.I != _size - 1)
+            // não está na ultima linha e o vizinho não é predio
+            if (point.I != _size - 1 && Points[point.I + 1, point.J].Terrain != Terrain.Building)
                 neighbors.Add(Points[point.I + 1, point.J]);
 
             return neighbors;
@@ -204,7 +204,8 @@ namespace Assemble
                 {
                     if (j != i)
                     {
-                        Result[i, j] = Result[j, i]= aStar.Star(Characters[i].Position, Characters[j].Position);
+                        result[i, j] = aStar.Star(Characters[i].Position, Characters[j].Position);
+                        result[j, i] = result[i, j];
                     }
                     else
                     {
