@@ -200,11 +200,11 @@ namespace Assemble
 
             for (var i = 0; i < this.Characters.Count; i++)
             {
-                for (var j = 0; j < this.Characters.Count; j++)
+                for (var j = i; j < this.Characters.Count; j++)
                 {
                     if (j != i)
                     {
-                        Result[i, j] = aStar.Star(Characters[i].Position, Characters[j].Position);
+                        Result[i, j] = Result[j, i]= aStar.Star(Characters[i].Position, Characters[j].Position);
                     }
                     else
                     {
