@@ -40,13 +40,19 @@ namespace Assemble
             int numberOfavengers = 0; 
             Random random = new Random(Guid.NewGuid().GetHashCode());
 
+            // fill the terrain atribute on characters
+            foreach (var character in characters)
+            {
+                character.Position.Terrain = Points[character.Position.I, character.Position.J].Terrain;
+            }
+
             while (numberOfavengers < 3)
             {
-                foreach (var character in characters)
+                for(var i = 1; i < characters.Count; i++)
                 {
                     if (numberOfavengers < 3 && random.NextDouble() > 0.5)
                     {
-                        character.isConvincible = true;
+                        characters[i].isConvincible = true;
                         numberOfavengers++;
                     }
                 }
@@ -101,7 +107,7 @@ namespace Assemble
 
         private IList<string> GetPathInDirections(List<string> names)
         {
-            var currPos = new Point(23, 19, this.Points[23, 19].Terrain);
+            var currPos = new Point(22, 18, this.Points[22, 18].Terrain);
             var currentPoint = new Point(0, 0, this.Points[0, 0].Terrain);
             var steps = new List<string>();
             foreach (var name in names)
@@ -110,9 +116,10 @@ namespace Assemble
                 var path = GetPathInPoints(currPos, dest);
                 
                 //Para cada ponto na rota entre a posição atual e o destion, adicionar o step que se deve fazer
+                currentPoint = currPos;
                 foreach (var stepDest in path)
                 {
-                    steps.Add(GetStep(currPos, stepDest));
+                    steps.Add(GetStep(currentPoint, stepDest));
                     currentPoint = stepDest;
                 }
 
@@ -138,12 +145,12 @@ namespace Assemble
 
             if (dest.J > currPos.J)
             {
-                return "left";
+                return "right";
             }
 
-            if (dest.J > currPos.J)
+            if (dest.J < currPos.J)
             {
-                return "right";
+                return "`left";
             }
 
             return "stop";
@@ -218,6 +225,8 @@ namespace Assemble
                 }
             }
 
+            // tira o nick da lista
+            this.Characters.RemoveAt(0);
             this.Result = result;
         }
     }

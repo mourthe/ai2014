@@ -177,7 +177,7 @@ namespace Assemble.Test
             Assert.That(map.Result[4, 5].BestPath.ElementAt(3).Equals(new Point(9, 4, Terrain.Asphalt)), Is.True);
         }
 
-        [Test]
+        //[Test]
         public void Result_Genetic_should_be_build_Best_Path()
         {
             // arrange5
@@ -195,6 +195,19 @@ namespace Assemble.Test
         }
 
         #endregion
+
+        [Test]
+        public void Maps_Create_character_makes_three_avengers_convincible()
+        {
+            // arrange
+            var characters = CreateFullCharacters();
+
+            // act
+            var map = CreateMap(characters);
+
+            // assert
+            Assert.That( map.Characters.Count(character => character.isConvincible), Is.EqualTo(3));
+        }
 
         private static List<Character> CreateCharacters()
         {
