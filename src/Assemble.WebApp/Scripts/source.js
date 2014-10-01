@@ -15,20 +15,18 @@ var SOURCE_FROM_TILED_MAP_EDITOR = { "height":42,
          "width":42,
          "x":0,
          "y": 0,
-         "characters": [
-            {
-                "name": "Capitão América",
-                "position": { "idx": 0, "i": 23, "j": 23 }
-            },
-            {
-                "name": "Stark",
-                "position": { "idx": 1, "i": 27, "j": 27 }
-            },
-            {
-                "name": "Hulk",
-                "position": { "idx": 2, "i": 29, "j": 29 }
-            },
-         ]
+		  "characters": [
+			{
+			  "name": "Capitão América",
+			  "idx":0, 
+			  "position": {"i": 23, "j": 23}
+			},
+			{
+			  "name": "Stark",
+			  "idx":1, 
+			  "position": {"i": 27, "j": 27}
+			},
+		  ]
         }],
  "orientation":"orthogonal",
  "properties":
