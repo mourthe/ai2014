@@ -24,7 +24,7 @@ namespace TravellingSalesman
     internal class Algorithm
     {
         private const int genesCount = 6;
-        private const int popCount = 500;
+        private const int popCount = 200;
         private const double crossoverProb = 1.0;
         private static List<Character> _characters;
         private static Map _cMap;
