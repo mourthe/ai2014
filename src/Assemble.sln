@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assemble.WebApi", "Assemble.WebApi\Assemble.WebApi.csproj", "{02C8CB3A-AD71-49C1-9E39-F0B91E149407}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assemble.WebApp", "Assemble.WebApp\Assemble.WebApp.csproj", "{0C31B243-7B46-4BF1-9F56-0CFE42B3276A}"
@@ -19,6 +17,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D2E4A477-D609-4656-9A43-1D044129DFD2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assemble.Test", "Assemble.Test\Assemble.Test.csproj", "{1700FE73-1EF4-4702-BED5-7FEDAF4D5B1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GALib", "GALib.csproj", "{0354C8F3-AA38-4FB6-84B5-BD93D8D1E0D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +42,10 @@ Global
 		{1700FE73-1EF4-4702-BED5-7FEDAF4D5B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1700FE73-1EF4-4702-BED5-7FEDAF4D5B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1700FE73-1EF4-4702-BED5-7FEDAF4D5B1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0354C8F3-AA38-4FB6-84B5-BD93D8D1E0D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0354C8F3-AA38-4FB6-84B5-BD93D8D1E0D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0354C8F3-AA38-4FB6-84B5-BD93D8D1E0D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0354C8F3-AA38-4FB6-84B5-BD93D8D1E0D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -24,8 +24,8 @@ namespace TravellingSalesman
     internal class Algorithm
     {
         private const int genesCount = 6;
-        private const int popCount = 200;
-        private const double crossoverProb = 0.8;
+        private const int popCount = 500;
+        private const double crossoverProb = 1.0;
         private static List<Character> _characters;
         private static Map _cMap;
 
@@ -39,27 +39,26 @@ namespace TravellingSalesman
             //only once. Therefore, our chromosome will contain all the integers
             //between 0 and 5 with no duplicates
 
-            // {{0,1,2,3,4,5},{1,0,2,4,3,5} ... }
-            var population = new Population(popCount, genesCount);
-
+            // {{1,2,3,4,5,6},{1,2,4,3,5,6} ... }
+            var population = new Population(popCount);
             for (var p = 0; p < popCount; p++)
             {
                 var chromosome = new Chromosome();
-                for (var g = 0; g < genesCount; g++)
+                for (var g = 1; g <= genesCount; g++)
                 {
                     chromosome.Genes.Add(new Gene(g));
                 }
                 chromosome.Genes.Shuffle();
                 population.Solutions.Add(chromosome);
-            }
+            }   
 
-            var elite = new Elite(5);
+            var elite = new Elite(10);
             var crossover = new Crossover(crossoverProb)
                 {
                     CrossoverType = CrossoverType.DoublePointOrdered
                 };
 
-            var mutate = new SwapMutate(0.05);
+            var mutate = new SwapMutate(0.5);
 
             //run the GA
             var ga = new GeneticAlgorithm(population, CalculateFitness);
@@ -75,7 +74,7 @@ namespace TravellingSalesman
             var fittest = ga.Population.GetTop(1)[0];
             foreach (var gene in fittest.Genes)
             {
-                names.Add(_characters.FirstOrDefault(c => c.Index == (int)gene.RealValue).Name);
+                names.Add(_cMap.Characters.FirstOrDefault(c => c.Index == (int)gene.RealValue).Name);
             }
 
             return names;
@@ -84,10 +83,10 @@ namespace TravellingSalesman
 
         static void ga_OnRunComplete(object sender, GaEventArgs e)
         {
-            var fittest = e.Population.GetTop(1)[0];
+             var fittest = e.Population.GetTop(1)[0];
             foreach (var gene in fittest.Genes)
             {
-                Console.WriteLine(_characters.FirstOrDefault(c => c.Index == (int)gene.RealValue).Name);
+                Console.WriteLine(_cMap.Characters.FirstOrDefault(c => c.Index == (int)gene.RealValue).Name);
             }
 
         }
@@ -102,35 +101,45 @@ namespace TravellingSalesman
 
         private static double CalculateFitness(Chromosome chromosome)
         {
-            //X' = X * k + d; 
-            //k = (B' - A') / (A - B);
-            //d = A' - B * k;
-            //k = -1/50
-            //d = 5
-            //x' = x * (-1 / 50) + 5;
-
-            var distanceToTravel = CalculateDistance(chromosome);
-            return 1 - distanceToTravel / 10000;
+            var distance = CalculateDistance(chromosome);
+            return distance;
         }
     
         private static double CalculateDistance(Chromosome chromosome)
         {
             var distanceToTravel = 0.0;
+            int currentPoint;
+            int destinationPoint;
 
-            for (var i = 0; i < chromosome.Genes.Count; i++)
+            currentPoint = 0;
+            destinationPoint = (int)chromosome.Genes[0].RealValue;
+            distanceToTravel += _cMap.Result[currentPoint, destinationPoint].Cost;
+
+            for (var i = 0; i < chromosome.Genes.Count - 1; i++)
             {
-                var currentPoint = Convert.ToInt32(chromosome.Genes[i].RealValue);
-                var destinationPoint = Convert.ToInt32(chromosome.Genes[++i].RealValue);
+                try
+                {
+                    currentPoint = (int)chromosome.Genes[i].RealValue;
+                    destinationPoint = (int)chromosome.Genes[i + 1].RealValue;
 
-                distanceToTravel += _cMap.Result[currentPoint, destinationPoint].Cost;
+                    distanceToTravel += _cMap.Result[currentPoint, destinationPoint].Cost;
+                }
+                catch (Exception e)
+                {
+                    Console.Out.WriteLine(e);
+                }
             }
+
+            currentPoint = (int)chromosome.Genes[chromosome.Genes.Count - 1].RealValue;
+            destinationPoint = 0;
+            distanceToTravel += _cMap.Result[currentPoint, destinationPoint].Cost;
 
             return distanceToTravel;
         }
 
         public static bool Terminate(Population population, int currentGeneration, long currentEvaluation)
         {
-            return currentGeneration > 300;
+            return currentGeneration > 100;
         }
 
     }

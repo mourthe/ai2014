@@ -148,9 +148,6 @@ namespace Assemble.Test
             // arrange5
             var map = CreateMap(CreateFullCharacters()); 
 
-            // act
-            map.InitializeResult();
-
             // assert
             Assert.That(map.Result[0, 1].Cost, Is.EqualTo(28));
             Assert.That(map.Result[4, 3].Cost, Is.EqualTo(34));
@@ -165,9 +162,6 @@ namespace Assemble.Test
             // arrange5
             var map = CreateMap(CreateFullCharacters());
 
-            // act
-            map.InitializeResult();
-
             // assert
             Assert.That(map.Result[4, 5].Cost, Is.EqualTo(9));
             Assert.That(map.Result[4, 5].BestPath.Count, Is.EqualTo(4));
@@ -175,6 +169,23 @@ namespace Assemble.Test
             Assert.That(map.Result[4, 5].BestPath.ElementAt(1).Equals(new Point(9, 2, Terrain.Grass)), Is.True);
             Assert.That(map.Result[4, 5].BestPath.ElementAt(2).Equals(new Point(9, 3, Terrain.Asphalt)), Is.True);
             Assert.That(map.Result[4, 5].BestPath.ElementAt(3).Equals(new Point(9, 4, Terrain.Asphalt)), Is.True);
+        }
+
+        [Test]
+        public void Result_Genetic_should_be_build_Best_Path()
+        {
+            // arrange5
+            var map = CreateMap(CreateFullCharacters());
+
+            var path = map.GetBestPath();
+
+            // assert
+            //Assert.That(map.Result[4, 5].Cost, Is.EqualTo(9));
+            //Assert.That(map.Result[4, 5].BestPath.Count, Is.EqualTo(4));
+            //Assert.That(map.Result[4, 5].BestPath.ElementAt(0).Equals(new Point(8, 2, Terrain.Asphalt)), Is.True);
+            //Assert.That(map.Result[4, 5].BestPath.ElementAt(1).Equals(new Point(9, 2, Terrain.Grass)), Is.True);
+            //Assert.That(map.Result[4, 5].BestPath.ElementAt(2).Equals(new Point(9, 3, Terrain.Asphalt)), Is.True);
+            //Assert.That(map.Result[4, 5].BestPath.ElementAt(3).Equals(new Point(9, 4, Terrain.Asphalt)), Is.True);
         }
 
         #endregion
@@ -195,12 +206,12 @@ namespace Assemble.Test
             var characters = new List<Character>
             {
                 new Character() {Index = 0, Name = "Nick", Position = new Point(6, 4, Terrain.Earth)},
-                new Character() {Index = 1, Name = "Tony", Position = new Point(0, 1, Terrain.Earth)},
+                new Character() {Index = 5, Name = "Tony", Position = new Point(0, 1, Terrain.Earth)},
                 new Character() {Index = 2, Name = "Steve", Position = new Point(2, 5, Terrain.Grass)},
                 new Character() {Index = 3, Name = "Hulk", Position = new Point(3, 9, Terrain.Asphalt)},
-                new Character() {Index = 4, Name = "Thor", Position = new Point(8, 1, Terrain.Asphalt)},
-                new Character() {Index = 5, Name = "Hawkeye", Position = new Point(9, 4, Terrain.Asphalt)},
-                new Character() {Index = 6, Name = "Black Widow", Position = new Point(7, 8, Terrain.Stones)}
+                new Character() {Index = 4, Name = "Thor", Position = new Point(5, 1, Terrain.Asphalt)},
+                new Character() {Index = 1, Name = "Hawkeye", Position = new Point(9, 4, Terrain.Asphalt)},
+                new Character() {Index = 6, Name = "Black Widow", Position = new Point(8, 1, Terrain.Stones)}
             };
 
             return characters;

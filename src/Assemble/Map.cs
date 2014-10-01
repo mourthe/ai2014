@@ -31,6 +31,7 @@ namespace Assemble
             this.Points = new Point[_size, _size];
             this.BuildTerrain(terrain);
             this.Characters = this.CreateCharacters(characters);
+            this.InitializeResult();
             //Mapa tá pronto, vc tem o mapa!
         }
 
@@ -145,11 +146,6 @@ namespace Assemble
 
         private IEnumerable<Point> GetPathInPoints(Point currPos, Point dest)
         {   
-            if (this.Result == null)
-            {
-                InitializeResult();
-            }
-
             int current = 0, destination = 0;
             for (int i = 0, j = 0; i < this.Characters.Count; i++, j++)
             {
