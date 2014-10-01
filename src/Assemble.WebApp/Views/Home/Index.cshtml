@@ -97,10 +97,11 @@
 	            reqData["characters"] = SOURCE_FROM_TILED_MAP_EDITOR.layers[0].characters;
 	            $.ajax({
 	                url: "api/path",
-	                type: "POST",
+	                type: "post",
 	                contentType: 'application/json',
 	                accepts: 'application/json',
-	                data: reqData
+	                data: JSON.stringify(reqData),
+	                dataType: "json"
 	            }).done(function () {
 	                jQuery.event.trigger({ type: 'keypress', which: character.charCodeAt(38) });
 	                jQuery.event.trigger({ type: 'keypress', which: character.charCodeAt(38) });
