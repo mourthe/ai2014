@@ -72,7 +72,7 @@ namespace Assemble
                 this.InitializeResult();
             }
 
-            var filteredNames = this.getThreeConvincedNames(TravellingSalesman.Algorithm.Execute(this));
+            var filteredNames = this.GetThreeConvincedNames(TravellingSalesman.Algorithm.Execute(this));
             return this.GetPathInDirections(filteredNames);
         }
 
@@ -102,23 +102,23 @@ namespace Assemble
         private IList<string> GetPathInDirections(List<string> names)
         {
             var currPos = new Point(23, 19, this.Points[23, 19].Terrain);
-            var currDest = new Point(0, 0, this.Points[0, 0].Terrain);
+            var currentPoint = new Point(0, 0, this.Points[0, 0].Terrain);
             var steps = new List<string>();
             foreach (var name in names)
             {
-                var dest = getPointFromName(name);
+                var dest = GetPointFromName(name);
                 var path = GetPathInPoints(currPos, dest);
                 
                 //Para cada ponto na rota entre a posição atual e o destion, adicionar o step que se deve fazer
                 foreach (var stepDest in path)
                 {
                     steps.Add(GetStep(currPos, stepDest));
-                    currDest = stepDest;
+                    currentPoint = stepDest;
                 }
 
                 //Adiciona step de stop para poder rolar a animação da conversa de convencimento
                 steps.Add("stop");
-                currPos = currDest;
+                currPos = currentPoint;
             }
 
             return steps;
@@ -146,7 +146,7 @@ namespace Assemble
                 return "right";
             }
 
-            return "up";
+            return "stop";
         }
 
         private IEnumerable<Point> GetPathInPoints(Point currPos, Point dest)
@@ -168,20 +168,22 @@ namespace Assemble
             return this.Result[current, destination].BestPath;
         }
 
-        private Point getPointFromName(string name)
+        private Point GetPointFromName(string name)
         {
             return this.Characters.FirstOrDefault(c => c.Name == name).Position;
         }
 
-        private List<string> getThreeConvincedNames(List<string> names)
+        private List<string> GetThreeConvincedNames(IEnumerable<string> names)
         {
             var count = 0;
-            List<string> filteredNames = new List<string>();
+            var filteredNames = new List<string>();
+            
             foreach (var name in names)
             {
-                filteredNames.Add(name);
                 if (this.Characters.FirstOrDefault(c => c.Name == name).isConvincible)
                 {
+                    filteredNames.Add(name);
+
                     count++;
                     if (count == 3)
                     {
