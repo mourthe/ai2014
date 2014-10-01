@@ -11,13 +11,33 @@ var SOURCE_FROM_TILED_MAP_EDITOR = { "height":42,
 			{
 			  "name": "Capitão América",
 			  "idx":0, 
-			  "position": {"i": 23, "j": 23}
+			  "position": {"i": 4, "j": 12}
 			},
 			{
 			  "name": "Stark",
 			  "idx":1, 
-			  "position": {"i": 27, "j": 27}
+			  "position": {"i": 9, "j": 8}
 			},
+            {
+                "name": "Hawkeye",
+                "idx": 2,
+                "position": { "i": 5, "j": 34 }
+            },
+            {
+                "name": "Hulk",
+                "idx": 3,
+                "position": { "i": 23, "j": 37 }
+            },
+            {
+                "name": "Thor",
+                "idx": 4,
+                "position": { "i": 35, "j": 14 }
+            },
+            {
+                "name": "Black Widow",
+                "idx": 5,
+                "position": { "i": 36, "j": 36 }
+            }
 		 ],
 		 "height":42,
          "name":"Camada de Tiles 1",
