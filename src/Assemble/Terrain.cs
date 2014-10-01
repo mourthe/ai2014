@@ -8,9 +8,9 @@ namespace Assemble
 {
     public enum Terrain
     {
-        Asphalt = 171,
+        Asphalt = 172,
         Earth = 101,
-        Grass = 354,
+        Grass = 355,
         Stones = 491,
         Building = 495
     }
