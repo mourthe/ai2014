@@ -159,12 +159,13 @@ namespace Assemble
         private IEnumerable<Point> GetPathInPoints(Point currPos, Point dest)
         {
             int current = 0, destination = 0;
-            var charactersPlusNick = this.Characters;
+            var charactersPlusNick = this.Characters.ToList();
+
             charactersPlusNick.Insert(0,
                 new Character() {Index = 0, Position = this.Points[22, 18], Name = "nick"});
 
             // checa se esta nos characters
-            for (int i = 1, j = 1; i < charactersPlusNick.Count; i++, j++)
+            for (int i = 0, j = 0; i < charactersPlusNick.Count; i++, j++)
             {
                 if (currPos.Equals(charactersPlusNick[i].Position))
                 {
