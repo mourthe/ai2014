@@ -163,7 +163,8 @@ namespace Assemble
         private IEnumerable<Point> GetPathInPoints(Point currPos, Point dest)
         {
             int current = 0, destination = 0;
-            var charactersPlusNick = this.Characters;
+            var charactersPlusNick = this.Characters.ToList();
+
             charactersPlusNick.Insert(0,
                 new Character() {Index = 0, Position = this.Points[22, 18], Name = "nick"});
 
