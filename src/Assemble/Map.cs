@@ -19,7 +19,7 @@ namespace Assemble
         public static readonly int Height = 42;
         public static readonly int Width = 42;
         private readonly int _size;
-        private readonly List<Character> _charactersWithNick;
+        public List<Character> CharactersWithNick { get; private set; }
 
         /// <summary>
         /// Construtor da classe Map
@@ -33,7 +33,7 @@ namespace Assemble
             this.BuildTerrain(terrain);
             
             // copia charactersWithNick e o tira da lista
-            this._charactersWithNick = characters.ToList();
+            this.CharactersWithNick = characters.ToList();
             characters.RemoveAt(0);
 
             this.Characters = this.CreateCharacters(characters);
@@ -53,18 +53,18 @@ namespace Assemble
             }
 
             // fill the terrain atribute on charactersWithNick
-            foreach (var character in _charactersWithNick)
+            foreach (var character in CharactersWithNick)
             {
                 character.Position.Terrain = Points[character.Position.I, character.Position.J].Terrain;
             }
 
             while (numberOfavengers < 3)
             {
-                for(var i = 1; i < characters.Count; i++)
+                foreach (var character in characters)
                 {
                     if (numberOfavengers < 3 && random.NextDouble() > 0.5)
                     {
-                        characters[i].isConvincible = true;
+                        character.isConvincible = true;
                         numberOfavengers++;
                     }
                 }
@@ -129,7 +129,8 @@ namespace Assemble
                     var dest = GetPointFromName(name);
                     var path = GetPathInPoints(currPos, dest);
 
-                    foreach (var stepDest in path)
+                    var stepDests = path as Point[] ?? path.ToArray();
+                    foreach (var stepDest in stepDests)
                     {
                         steps.Add(GetStep(currPos, stepDest));
                         currPos = stepDest;
@@ -137,7 +138,7 @@ namespace Assemble
 
                     //Adiciona step de stop para poder rolar a animação da conversa de convencimento
                     steps.Add("stop");
-                    currPos = path.Last();
+                    currPos = stepDests.Last();
                 }
                 catch (Exception e)
                 {                    
@@ -179,14 +180,14 @@ namespace Assemble
 
 
             // checa se esta nos characters
-            for (int i = 0, j = 0; i < _charactersWithNick.Count; i++, j++)
+            for (int i = 0, j = 0; i < CharactersWithNick.Count; i++, j++)
             {
-                if (currPos.Equals(_charactersWithNick[i].Position))
+                if (currPos.Equals(CharactersWithNick[i].Position))
                 {
                     current = i;
                 }
 
-                if (dest.Equals(_charactersWithNick[j].Position))
+                if (dest.Equals(CharactersWithNick[j].Position))
                 {
                     destination = j;
                 }
@@ -197,7 +198,7 @@ namespace Assemble
 
         private Point GetPointFromName(string name)
         {
-            return _charactersWithNick.FirstOrDefault(c => c.Name == name).Position;
+            return CharactersWithNick.FirstOrDefault(c => c.Name == name).Position;
         }
 
         private List<string> GetThreeConvincedNames(IEnumerable<string> names)
@@ -227,17 +228,18 @@ namespace Assemble
             var result = new SearchResult[7, 7];
             var aStar = new AStar.AStar(this);
 
-            for (var i = 0; i < _charactersWithNick.Count; i++)
+            for (var i = 0; i < CharactersWithNick.Count; i++)
             {
-                for (var j = i; j < _charactersWithNick.Count; j++)
+                for (var j = i; j < CharactersWithNick.Count; j++)
                 {
                     if (j != i)
                     {
-                        result[i, j] = aStar.Star(_charactersWithNick[i].Position, _charactersWithNick[j].Position);
-                        
+                        result[i, j] = aStar.Star(CharactersWithNick[i].Position, CharactersWithNick[j].Position);
+                        result[j, i] = aStar.Star(CharactersWithNick[j].Position, CharactersWithNick[i].Position);
+
                         // matriz é simétrica em relação a diagonal
-                        result[j, i] = new SearchResult(result[i, j].Cost, result[i, j].BestPath.ToList());
-                        result[j, i].BestPath.Reverse();
+                        // result[j, i] = new SearchResult(result[i, j].Cost, result[i, j].BestPath.ToList());
+                        // result[j, i].BestPath.Reverse();
                     }
                     else
                     {
