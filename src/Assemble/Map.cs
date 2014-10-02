@@ -120,24 +120,29 @@ namespace Assemble
         private IList<string> GetPathInDirections(List<string> names)
         {
             var currPos = new Point(22, 18, this.Points[22, 18].Terrain);
-            var currentPoint = new Point(0, 0, this.Points[0, 0].Terrain);
             var steps = new List<string>();
+            names.Add("Nick");
             foreach (var name in names)
             {
-                var dest = GetPointFromName(name);
-                var path = GetPathInPoints(currPos, dest);
-                
-                //Para cada ponto na rota entre a posição atual e o destion, adicionar o step que se deve fazer
-                currentPoint = currPos;
-                foreach (var stepDest in path)
+                try
                 {
-                    steps.Add(GetStep(currentPoint, stepDest));
-                    currentPoint = stepDest;
-                }
+                    var dest = GetPointFromName(name);
+                    var path = GetPathInPoints(currPos, dest);
 
-                //Adiciona step de stop para poder rolar a animação da conversa de convencimento
-                steps.Add("stop");
-                currPos = currentPoint;
+                    foreach (var stepDest in path)
+                    {
+                        steps.Add(GetStep(currPos, stepDest));
+                        currPos = stepDest;
+                    }
+
+                    //Adiciona step de stop para poder rolar a animação da conversa de convencimento
+                    steps.Add("stop");
+                    currPos = path.Last();
+                }
+                catch (Exception e)
+                {                    
+                    throw e;
+                }
             }
 
             return steps;
@@ -147,22 +152,22 @@ namespace Assemble
         {
             if (dest.I > currPos.I)
             {
-                return "down";
+                return "s";
             }
 
             if (dest.I < currPos.I)
             {
-                return "up";
+                return "n";
             }
 
             if (dest.J > currPos.J)
             {
-                return "right";
+                return "e";
             }
 
             if (dest.J < currPos.J)
             {
-                return "`left";
+                return "w";
             }
 
             return "stop";
@@ -231,6 +236,8 @@ namespace Assemble
                         result[i, j] = aStar.Star(_charactersWithNick[i].Position, _charactersWithNick[j].Position);
                         
                         // matriz é simétrica em relação a diagonal
+                        result[j, i] = new SearchResult(result[i, j].Cost, result[i, j].BestPath.ToList());
+                        result[j, i].BestPath.Reverse();
                         result[j, i] = result[i, j];
                     }
                     else
