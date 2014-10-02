@@ -19,6 +19,7 @@ namespace Assemble
         public static readonly int Height = 42;
         public static readonly int Width = 42;
         private readonly int _size;
+        private readonly List<Character> _charactersWithNick;
 
         /// <summary>
         /// Construtor da classe Map
@@ -30,6 +31,11 @@ namespace Assemble
             this.Result = null;
             this.Points = new Point[_size, _size];
             this.BuildTerrain(terrain);
+            
+            // copia charactersWithNick e o tira da lista
+            this._charactersWithNick = characters.ToList();
+            characters.RemoveAt(0);
+
             this.Characters = this.CreateCharacters(characters);
 //            this.InitializeResult();
             //Mapa tá pronto, vc tem o mapa!
@@ -42,6 +48,12 @@ namespace Assemble
 
             // fill the terrain atribute on characters
             foreach (var character in characters)
+            {
+                character.Position.Terrain = Points[character.Position.I, character.Position.J].Terrain;
+            }
+
+            // fill the terrain atribute on charactersWithNick
+            foreach (var character in _charactersWithNick)
             {
                 character.Position.Terrain = Points[character.Position.I, character.Position.J].Terrain;
             }
@@ -164,20 +176,17 @@ namespace Assemble
         private IEnumerable<Point> GetPathInPoints(Point currPos, Point dest)
         {
             int current = 0, destination = 0;
-            var charactersPlusNick = this.Characters.ToList();
 
-            charactersPlusNick.Insert(0,
-                new Character() {Index = 0, Position = this.Points[22, 18], Name = "nick"});
 
             // checa se esta nos characters
-            for (int i = 0, j = 0; i < charactersPlusNick.Count; i++, j++)
+            for (int i = 0, j = 0; i < _charactersWithNick.Count; i++, j++)
             {
-                if (currPos.Equals(charactersPlusNick[i].Position))
+                if (currPos.Equals(_charactersWithNick[i].Position))
                 {
                     current = i;
                 }
 
-                if (dest.Equals(charactersPlusNick[j].Position))
+                if (dest.Equals(_charactersWithNick[j].Position))
                 {
                     destination = j;
                 }
@@ -188,7 +197,7 @@ namespace Assemble
 
         private Point GetPointFromName(string name)
         {
-            return this.Characters.FirstOrDefault(c => c.Name == name).Position;
+            return _charactersWithNick.FirstOrDefault(c => c.Name == name).Position;
         }
 
         private List<string> GetThreeConvincedNames(IEnumerable<string> names)
@@ -218,13 +227,13 @@ namespace Assemble
             var result = new SearchResult[7, 7];
             var aStar = new AStar.AStar(this);
 
-            for (var i = 0; i < this.Characters.Count; i++)
+            for (var i = 0; i < _charactersWithNick.Count; i++)
             {
-                for (var j = i; j < this.Characters.Count; j++)
+                for (var j = i; j < _charactersWithNick.Count; j++)
                 {
                     if (j != i)
                     {
-                        result[i, j] = aStar.Star(Characters[i].Position, Characters[j].Position);
+                        result[i, j] = aStar.Star(_charactersWithNick[i].Position, _charactersWithNick[j].Position);
                         
                         // matriz é simétrica em relação a diagonal
                         result[j, i] = result[i, j];
@@ -236,8 +245,6 @@ namespace Assemble
                 }
             }
 
-            // tira o nick da lista
-            this.Characters.RemoveAt(0);
             this.Result = result;
         }
     }
