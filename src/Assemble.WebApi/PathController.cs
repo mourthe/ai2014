@@ -16,7 +16,7 @@ namespace Assemble.WebApi
         [HttpPost]
         public IList<string> Post(GetPathRequest request)
         {
-            //return new List<string>(){ "up", "left", "down", "left", "down"};
+            //return new List<string>() { "left", "left", "up", "up", "up", "right", "right", "right", "right", "right", "up", "up", "up"};
             return new AssembleService().GetBestPath(request.Terrain, request.Characters); 
         }
     }
