@@ -102,22 +102,27 @@
 	                   data: JSON.stringify(reqData),
 	                   dataType: "json"
 	               }).done(function (data) {
+	                   var i = 1;
 	                   data.forEach(function (movement) {
 	                       window.Player.timeout(function () {
+	                           this.stop().animate("walk_up", 10, -1);
+	                           this.stop().animate("walk_down", 10, -1);
+	                           this.stop().animate("walk_left", 10, -1);
+	                           this.stop().animate("walk_right", 10, -1);
 	                           if (movement == 'up') {
-	                               window.Player.move('n', 20);
+	                               window.Player.animate("walk_up", 5, 5); window.Player.move("n", 20);
 	                           }
 	                           if (movement == 'down') {
-	                               window.Player.move('s', 20);
+	                               window.Player.animate("walk_down", 5, 5); window.Player.move("s", 20);
 	                           }
 	                           if (movement == 'left') {
-	                               window.Player.move('e', 20);
+	                               window.Player.animate("walk_left", 5, 5); window.Player.move("e", 20);
 	                           }
 	                           if (movement == 'right') {
-	                               window.Player.move('w', 20);
+	                               window.Player.animate("walk_right", 5, 5); window.Player.move("w", 20);
 	                           }
-	                       }, 200);
-	                       
+	                       }, 350 * i);
+	                       i++;
 	                   });	                   
 	               });
 	           });
