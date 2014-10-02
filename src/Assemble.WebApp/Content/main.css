@@ -30,3 +30,17 @@ html {
   -o-background-size: cover;
   background-size: cover;
 }
+
+.result-panel {
+    background-color: #404040;
+    position: absolute;
+    float: left;
+    width: 500px;
+    height: 250px;
+    margin-left: 50px;
+    margin-top:  50px;
+    padding: 0px 0px 0px 10px;
+    color:  #F6FAFF;
+    line-height: 160%;
+    border-radius: 27px;
+}

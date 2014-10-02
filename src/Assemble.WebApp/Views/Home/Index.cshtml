@@ -125,7 +125,7 @@
 	                   dataType: "json"
 	               }).done(function (data) {
 	                   var i = 1;
-	                   data.forEach(function (movement) {
+	                   data.steps.forEach(function (movement) {
 	                       window.Player.timeout(function () {
 	                           this.stop().animate("walk_up", 10, -1);
 	                           this.stop().animate("walk_down", 10, -1);
@@ -153,6 +153,13 @@
 	</script>
       <div id="assemble" class="big-btn">
           <img src="~/Images/assemble.png"></img>
+      </div>
+      <div id="result" class="result-panel">  
+          <span class="result-order"><h3>Ordem:</h3> </span>  
+          </ br>
+          <span class="result-cost"><h3>Participantes:</h3> </span>
+          </ br>
+          <span class="result-cost"><h3>Custo:</h3> </span>    
       </div>
   </body>
 </html>

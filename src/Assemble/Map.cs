@@ -83,14 +83,16 @@ namespace Assemble
             }
         }
 
-        public IList<string> GetBestPath()
+        public IList<string> GetBestPath(out double cost, out IList<string> party)
         {
             if (this.Result == null)
             {
                 this.InitializeResult();
             }
 
-            return this.GetPathInDirections(TravellingSalesman.Algorithm.Execute(this));
+            var names = TravellingSalesman.Algorithm.Execute(this,out cost);
+            party = GetThreeConvincedNames(names);
+            return this.GetPathInDirections(names);
         }
 
         public IList<Point> GetNeighbors(Point point)

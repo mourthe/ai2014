@@ -9,9 +9,9 @@ namespace Assemble
 {
     public class AssembleService
     {
-        public IList<string> GetBestPath(IList<int> terrain, IList<Character> characters)
+        public static IList<string> GetBestPath(IList<int> terrain, IList<Character> characters, out double cost, out IList<string> party)
         {
-            return new Map(terrain, characters).GetBestPath();
+            return new Map(terrain, characters).GetBestPath(out cost, out party);
         }
     }
 }
