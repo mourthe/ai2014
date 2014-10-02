@@ -109,6 +109,7 @@ namespace Assemble
         {
             var currPos = new Point(22, 18, this.Points[22, 18].Terrain);
             var steps = new List<string>();
+            names.Add("Nick");
             foreach (var name in names)
             {
                 try
