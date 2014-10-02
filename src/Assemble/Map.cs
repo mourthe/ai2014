@@ -236,6 +236,8 @@ namespace Assemble
                         result[i, j] = aStar.Star(_charactersWithNick[i].Position, _charactersWithNick[j].Position);
                         
                         // matriz é simétrica em relação a diagonal
+                        result[j, i] = new SearchResult(result[i, j].Cost, result[i, j].BestPath.ToList());
+                        result[j, i].BestPath.Reverse();
                         result[j, i] = result[i, j];
                     }
                     else
