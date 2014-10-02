@@ -90,8 +90,7 @@ namespace Assemble
                 this.InitializeResult();
             }
 
-            var filteredNames = this.GetThreeConvincedNames(TravellingSalesman.Algorithm.Execute(this));
-            return this.GetPathInDirections(filteredNames);
+            return this.GetPathInDirections(TravellingSalesman.Algorithm.Execute(this));
         }
 
         public IList<Point> GetNeighbors(Point point)
