@@ -62,7 +62,7 @@ namespace Assemble
             {
                 foreach (var character in characters)
                 {
-                    if (numberOfavengers < 3 && random.NextDouble() > 0.5)
+                    if (numberOfavengers < 3 && random.NextDouble() > 0.5 && !character.isConvincible)
                     {
                         character.isConvincible = true;
                         numberOfavengers++;
@@ -215,12 +215,12 @@ namespace Assemble
                 if (this.Characters.FirstOrDefault(c => c.Name == name).isConvincible)
                 {
                     count++;
-                }
-
-                // if got 3 convicibles breack
-                if (count == 3)
-                {
-                    break;
+                    // if got 3 convicibles breack
+                    
+                    if (count == 3)
+                    {
+                        break;
+                    }
                 }
             }
 
