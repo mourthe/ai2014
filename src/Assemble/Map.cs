@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -90,9 +91,9 @@ namespace Assemble
                 this.InitializeResult();
             }
 
-            var names = TravellingSalesman.Algorithm.Execute(this,out cost);
+            var names = TravellingSalesman.Algorithm.Execute(this/*,out cost*/);
             party = GetThreeConvincedNames(names);
-            return this.GetPathInDirections(names);
+            return this.GetPathInDirections(party.ToList(), out cost);
         }
 
         public IList<Point> GetNeighbors(Point point)
@@ -118,8 +119,9 @@ namespace Assemble
             return neighbors;
         }
 
-        private IList<string> GetPathInDirections(List<string> names)
+        private IList<string> GetPathInDirections(List<string> names, out double cost)
         {
+            cost = 0;
             var currPos = new Point(22, 18, this.Points[22, 18].Terrain);
             var steps = new List<string>();
             names.Add("Nick");
@@ -128,7 +130,7 @@ namespace Assemble
                 try
                 {
                     var dest = GetPointFromName(name);
-                    var path = GetPathInPoints(currPos, dest);
+                    var path = GetPathInPoints(currPos, dest, ref cost);
 
                     var stepDests = path as Point[] ?? path.ToArray();
                     foreach (var stepDest in stepDests)
@@ -146,7 +148,6 @@ namespace Assemble
                     throw e;
                 }
             }
-
             return steps;
         }
 
@@ -175,11 +176,10 @@ namespace Assemble
             return "stop";
         }
 
-        private IEnumerable<Point> GetPathInPoints(Point currPos, Point dest)
+        private IEnumerable<Point> GetPathInPoints(Point currPos, Point dest, ref double cost)
         {
             int current = 0, destination = 0;
-
-
+            
             // checa se esta nos characters
             for (int i = 0, j = 0; i < CharactersWithNick.Count; i++, j++)
             {
@@ -194,6 +194,8 @@ namespace Assemble
                 }
             }
 
+            cost += this.Result[current, destination].Cost;
+            
             return this.Result[current, destination].BestPath;
         }
 

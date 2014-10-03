@@ -29,7 +29,7 @@ namespace TravellingSalesman
         private static List<Character> _characters;
         private static Map _cMap;
 
-        public static List<string> Execute(Map map, out double cost)
+        public static List<string> Execute(Map map/*, out double cost*/)
         {
             // save the map for further use 
             _cMap = map;
@@ -76,7 +76,7 @@ namespace TravellingSalesman
             {
                 names.Add(_cMap.Characters.FirstOrDefault(c => c.Index == (int)gene.RealValue).Name);
             }
-            cost = fittest.Fitness;
+            //cost = CalculateDistance(fittest);
 
             return names;
 
@@ -102,7 +102,7 @@ namespace TravellingSalesman
 
         private static double CalculateFitness(Chromosome chromosome)
         {
-            var distance = CalculateDistance(chromosome);
+            var distance = 1/CalculateDistance(chromosome);
             return distance;
         }
     
