@@ -209,15 +209,18 @@ namespace Assemble
             
             foreach (var name in names)
             {
+                // add the name
+                filteredNames.Add(name);
+
                 if (this.Characters.FirstOrDefault(c => c.Name == name).isConvincible)
                 {
-                    filteredNames.Add(name);
-
                     count++;
-                    if (count == 3)
-                    {
-                        break;
-                    }
+                }
+
+                // if got 3 convicibles breack
+                if (count == 3)
+                {
+                    break;
                 }
             }
 
