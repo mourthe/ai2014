@@ -12,8 +12,8 @@ namespace Assemble.WebApi
         [DataMember(Name = "steps")]
         public IList<string> Steps { get; set; }
 
-        [DataMember(Name = "party")]
-        public IList<string> Party { get; set; }
+        [DataMember(Name = "visited")]
+        public IList<string> Visited { get; set; }
 
         [DataMember(Name = "cost")]
         public double Cost { get; set; }

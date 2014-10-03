@@ -145,7 +145,15 @@
 	                           }
 	                       }, 350 * i);
 	                       i++;
-	                   });	                   
+	                   });
+
+                       var pps = []
+	                   data.visited.forEach(function (pp) {
+	                      pps.push(pp + ", ");
+	                   });
+	                   $("#party-components").html(pps)
+	                   $("#cost-components").html(data.cost);
+
 	               });
 	           });
 	        });
@@ -155,11 +163,9 @@
           <img src="~/Images/assemble.png"></img>
       </div>
       <div id="result" class="result-panel">  
-          <span class="result-order"><h3>Ordem:</h3> </span>  
+          <span id="party" class="result-party"><h3>Visitados:&nbsp;</h3><span id="party-components"></span> </span>
           </ br>
-          <span class="result-cost"><h3>Participantes:</h3> </span>
-          </ br>
-          <span class="result-cost"><h3>Custo:</h3> </span>    
+          <span id="cost" class="result-cost"><h3>Custo:&nbsp;</h3><span id="cost-components"></span> </span>    
       </div>
   </body>
 </html>

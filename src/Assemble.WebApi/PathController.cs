@@ -16,13 +16,12 @@ namespace Assemble.WebApi
         [HttpPost]
         public GetPathResponse Post(GetPathRequest request)
         {
-            //return new List<string>() { "left", "left", "up", "up", "up", "right", "right", "right", "right", "right", "up", "up", "up"};
             var response = new GetPathResponse();
             double cost;
             IList<string> party;
             response.Steps = AssembleService.GetBestPath(request.Terrain, request.Characters, out cost, out party);
             response.Cost = cost;
-            response.Party = party;
+            response.Visited = party;
 
             return response;
         }
