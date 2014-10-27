@@ -37,25 +37,32 @@
 	            Crafty.load([
                              "Images/terrain.png",
                              "Images/ogre.png",
-                             "Images/1.png",
-                             "Images/2.png",
-                             "Images/3.png",
-                             "Images/4.png",
-                             "Images/5.png",
-                             "Images/6.png",
+                             "Images/cockroach.png",
 	            ], function () {
 
 	                Crafty.sprite(50, 67, "Images/ogre.png", {
 	                    Ogre: [0, 0]
 	                });
 
-	                SOURCE_FROM_TILED_MAP_EDITOR.layers[0].characters.forEach(function (character) {
-	                    if (character.idx != 0) { //se não for o próprio nick
-	                        var idx = character.idx;
-	                        var indexMap = {};
-	                        indexMap[idx] = [0, 0];
-	                        Crafty.sprite(50, 67, "Images/" + idx.toString() + ".png", indexMap);
-	                    } 
+	                Crafty.sprite(50, 67, "Images/cockroach.png", {
+	                    Cockroach: [0, 0]
+	                });
+
+
+	                Crafty.sprite(50, 67, "Images/loki1.png", {
+	                    Loki: [0, 0]
+	                });
+
+	                Crafty.sprite(50, 67, "Images/bullet.png", {
+	                    Bullet: [0, 0]
+	                });
+
+	                Crafty.sprite(50, 67, "Images/vortex.png", {
+	                    Vortex: [0, 0]
+	                });
+
+	                Crafty.sprite(50, 67, "Images/hole.png", {
+	                    Hole: [0, 0]
 	                });
 
 	                Crafty.scene("Main");
@@ -64,18 +71,84 @@
 
 	        Crafty.scene("Load");
 
+	        var isFree = [];
+
+	        var fillFreeSlots =  function fillFreeSlots() {
+                //Inicializando matriz de espaços ocupados com prédios
+	            for (x = 0, i = 0; i < 42; i++)
+	            {
+	                isFree[i] = [];
+	                for (j = 0; j < 42; x++, j++)
+	                {
+	                    if (SOURCE_FROM_TILED_MAP_EDITOR.layers[0].data[x] == 495) {
+	                        isFree[i][j] = false;
+	                    } else {
+	                        isFree[i][j] = true;
+	                    }
+	                } 
+	            }
+	        }();
+
+	        function getElements(count) {
+	            elements = []
+
+	            for (k = 0 ; k < count ; k++) {
+	                var i;
+	                var j;
+	                do {
+	                    j = Math.floor(Math.random() * 42);
+	                    i = Math.floor(Math.random() * 42);
+	                    element = {
+	                        position: {
+	                            j: j,
+	                            i: i
+	                        }
+	                    };
+	                } while (!isFree[i][j]);
+
+	                isFree[i][j] = false;
+	                elements.push(element);
+	            }
+
+	            return elements
+
+	        }
+
 	        Crafty.scene("Main", function () {
 
 	            Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource(SOURCE_FROM_TILED_MAP_EDITOR)
 				.createWorld(function (tiledmap) {
 
-				});
+				});	            
 
-	            SOURCE_FROM_TILED_MAP_EDITOR.layers[0].characters.forEach(function (character) {
-	                if (character.idx != 0) { //se não for o próprio nick
-	                    Crafty.e("2D, DOM, " + character.idx)
-                          .attr({ x: character.position.j * 19.2 , y: character.position.i * 19, z: 10, isWater: false });
-	                }
+	            window.lokis = getElements(20);
+	            window.lokis.forEach(function (character) {
+	                Crafty.e("2D, DOM, Loki")
+                        .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	            });
+
+	            window.cockroaches = getElements(100);
+	            window.cockroaches.forEach(function (character) {
+	                Crafty.e("2D, DOM, Cockroach")
+                        .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	            });
+
+	            window.bullets = getElements(30);
+	            window.bullets.forEach(function (character) {
+	                Crafty.e("2D, DOM, Bullet")
+                        .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	            });
+
+	            window.hole = getElements(50);
+	            window.hole.forEach(function (character) {
+	                Crafty.e("2D, DOM, Hole")
+                        .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	            });
+
+	            window.vortex = getElements(20);
+	            window.vortex.forEach(function (character) {
+	                Crafty.e("2D, DOM, Vortex")
+                        .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
 	            });
 
 
@@ -115,7 +188,8 @@
 	           $("#assemble").click(function () {
 	               var reqData = {};
 	               reqData["terrain"] = SOURCE_FROM_TILED_MAP_EDITOR.layers[0].data;
-	               reqData["characters"] = SOURCE_FROM_TILED_MAP_EDITOR.layers[0].characters;
+	               reqData["cockroaches"] = window.cockroaches;
+	               reqData["lokis"] = window.lokis;
 	               $.ajax({
 	                   url: "api/path",
 	                   type: "post",
