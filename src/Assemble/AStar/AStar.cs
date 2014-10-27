@@ -71,6 +71,7 @@ namespace Assemble.AStar
                     if (hasExplored[child.J, child.I] && accChild >= father.AccCost)
                         continue;
 
+                    // Se nao estiver na heap ou o custo acumulado por menor que o custo do pai explore-o
                     if (inBorder[child.J, child.I] == false || accChild < father.AccCost)
                     {
                         heapBorder.HeapAdd(Heuristic(child, finalPosition) + accChild, 
