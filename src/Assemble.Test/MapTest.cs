@@ -201,23 +201,6 @@ namespace Assemble.Test
             }
         }
 
-        //[Test]
-        public void Result_Genetic_should_be_build_Best_Path()
-        {
-            // arrange5
-            var map = CreateMap(CreateFullCharacters());
-
-            var path = map.GetBestPath();
-
-            // assert
-            //Assert.That(map.Result[4, 5].Cost, Is.EqualTo(9));
-            //Assert.That(map.Result[4, 5].BestPath.Count, Is.EqualTo(4));
-            //Assert.That(map.Result[4, 5].BestPath.ElementAt(0).Equals(new Point(8, 2, Terrain.Asphalt)), Is.True);
-            //Assert.That(map.Result[4, 5].BestPath.ElementAt(1).Equals(new Point(9, 2, Terrain.Grass)), Is.True);
-            //Assert.That(map.Result[4, 5].BestPath.ElementAt(2).Equals(new Point(9, 3, Terrain.Asphalt)), Is.True);
-            //Assert.That(map.Result[4, 5].BestPath.ElementAt(3).Equals(new Point(9, 4, Terrain.Asphalt)), Is.True);
-        }
-
         #endregion
 
         [Test]
