@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,8 +51,12 @@
     <Compile Include="AStar\SearchResult.cs" />
     <Compile Include="AStar\Sorting.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Controller\BestMove.cs" />
+    <Compile Include="Controller\Helper.cs" />
+    <Compile Include="Controller\MapController.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Point.cs" />
+    <Compile Include="Controller\AgentController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terrain.cs" />
     <Compile Include="TravellingSalesman\AutoMutate.cs" />
