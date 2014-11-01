@@ -1,6 +1,6 @@
 ﻿namespace Assemble.Controller
 {
-    public enum BestMove
+    public enum Enums
     {
         Move,
         TurnRight,
