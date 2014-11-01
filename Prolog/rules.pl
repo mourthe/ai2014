@@ -7,7 +7,7 @@
 :- dynamic hole/2.
 :- dynamic trainer/2.
 :- dynamic visited/2.
-:- dynamic bug/3.
+:- dynamic bug/2.
 :- dynamic ammoShine/2.
 :- dynamic spaceDistortions/2.
 :- dynamic stinkCockroach/2.
@@ -88,8 +88,6 @@ nrstAmmo(X,Y) :- setof([Xs,Ys], Ammo(Xs,Ys),L) , distance_min(L,MinXY) , MinXY =
 nrstCockroach(X,Y) :- setof([Xs,Ys], cockroach(Xs,Ys),L) , distance_min(L,MinXY) , MinXY = min(D,[X,Y]) .
 
 nrstBug(X,Y) :- setof([Xs,Ys], bug(Xs,Ys),L) , distance_min(L,MinXY) , MinXY = min(D,[X,Y]) .
-
-bug(X,Y) :- bug(X,Y,_).
 
 nrstAllowed(L,MinXY ) :-  at(X,Y) , nrstAllowed(L, X, Y, MinXY).
 nrstAllowed(L, X0, Y0, MinXY) :-    aggregate( min(D, safe(Xt,Yt)) , (member(safe(Xt,Yt), L) , D is sqrt((Xt-X0)^2+(Yt-Y0)^2) , allowed(Xt,Yt) ), MinXY).
@@ -189,7 +187,7 @@ setSafe(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , safeLst(L) ,(
 updPerShine(X,Y) :-  assert(ammoShine(X,Y)) , tryAmmo(X,Y) .
 updPerSpaceD(X,Y) :- assert(spaceDistortions(X,Y)) , tryVortex(X,Y) .
 updPerCockS(X,Y,COCKS) :- (COCKS == 1 , assert(stinkCockroach(X,Y)) , tryCockroach(X,Y)) ; (COCKS == 0 , setSafe(X,Y)) . 
-updPerBinaries(X,Y,P) :- not(bug(X,Y,P)) , assert(bug(X,Y,P)).
+updPerBinaries(X,Y,P) :- not(bug(X,Y) , assert(bug(X,Y)).
 updFacing(D) :- retract(facing(X)) , assert(facing(D)).
 updBreeze(X,Y) :- assert(breeze(X,Y), tryHole(X,Y).
 
