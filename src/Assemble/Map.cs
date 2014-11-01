@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Assemble.AStar;
+using Assemble.Controller;
 
 namespace Assemble
 {
@@ -72,6 +73,24 @@ namespace Assemble
             }
 
             return characters;
+        }
+
+        public IList<string> FixBugs(out List<int> cost)
+        { 
+            var agent = new AgentController(this);
+            var actions = agent.Walk();
+            cost = new List<int>();
+
+            foreach(var action in actions){
+                cost.Add(getActionCost(action));
+            }
+
+            return actions;
+        }
+
+        public int getActionCost(string action)
+        {
+            return (int)((MoveCosts)System.Enum.Parse(typeof(MoveCosts), action, true));
         }
 
         private void BuildTerrain (IList<int> terrain){

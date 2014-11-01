@@ -32,7 +32,7 @@ namespace PrologC {
  
 		}
 		
-		static void updatePercp(PlEngine e , int x , int y , char * pokeName , bool hasPerfum , bool hasScremS , bool hasScreamT , bool hasPoke )
+		static void updatePercp(PlEngine e , int x , int y , bool hasShine, bool hasCockroach, bool hasBreeze, bool hasDistortions, bool hasBinaries )
 		{
 			if(hasPerfum)
 			{

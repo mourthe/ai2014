@@ -47,5 +47,45 @@ namespace Assemble.Controller
                 return sp;
             }
         }
+
+        public class Action{
+            public BestMove move;
+            public Point point;
+            public bool win;
+
+            public unsafe Action(int* actionParameters){
+                int i = 0;
+                int[] actionParams = new int[5];
+
+                while (actionParameters[i] != -1)
+                {
+                    actionParams[i] = actionParams[i];
+                    i++;
+                }
+           
+                if (actionParams != null && actionParams.Length >= 1)
+                {
+                    switch ((BestMove)actionParams[0])
+                    {
+                        case BestMove.Move:
+                        case BestMove.AStar:
+                        case BestMove.Debug:
+                        case BestMove.GetAmmo:
+                        case BestMove.FixBug:
+                            point = new Point(actionParams[1], actionParams[2]);
+                            break;
+                        case BestMove.Attack:
+                            point = new Point(actionParams[1], actionParams[2]);
+                            break;
+
+                    }
+                }
+                else {
+                    throw new Exception("Não pude ler os parâmetros da action");
+                }
+
+
+            }
+        } 
     }
 }

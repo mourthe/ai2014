@@ -23,10 +23,10 @@ namespace ManagedProlog {
 			return  PrologC::Prolog::bestMove( *e ) ;
 		}
 
-		static void UpdPerc(int x , int y , char * pokeName , bool hasPerfum , bool hasScremS , bool hasScreamT , bool hasPoke)
+		static void UpdPerc(int x , int y , bool hasShine, bool hasCockroach, bool hasBreeze, bool hasDistortions, bool hasBinaries)
 		{
 			PlEngine * e = (PlEngine *) eng;
-			PrologC::Prolog::updatePercp(*e,x,y,pokeName,hasPerfum,hasScremS,hasScreamT,hasPoke);
+			PrologC::Prolog::updatePercp(*e,x,y, hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
 		}
 
 		static bool IsVisited(int x , int y )

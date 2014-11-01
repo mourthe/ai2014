@@ -51,7 +51,7 @@
     <Compile Include="AStar\SearchResult.cs" />
     <Compile Include="AStar\Sorting.cs" />
     <Compile Include="Character.cs" />
-    <Compile Include="Controller\BestMove.cs" />
+    <Compile Include="Controller\Enums.cs" />
     <Compile Include="Controller\Helper.cs" />
     <Compile Include="Controller\MapController.cs" />
     <Compile Include="Map.cs" />

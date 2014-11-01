@@ -13,5 +13,10 @@ namespace Assemble
         {
             return new Map(terrain, characters).GetBestPath(out cost, out party);
         }
+
+        public static IList<string> FixBugs(IList<int> terrain, IList<Character> characters, out List<int> cost)
+        {
+            return new Map(terrain, characters).FixBugs(out cost);
+        }
     }
 }

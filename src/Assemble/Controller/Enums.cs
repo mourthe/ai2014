@@ -5,23 +5,23 @@
         Move,
         TurnRight,
         TurnLeft,
-        TurnBack,
         AStar, 
         GetAmmo,
-        KillCockroach,
-        KillBug,
+        Attack,
+        FixBug,
         JumpVortex,
-        Joker
+        Debug
     };
 
-    public enum Costs
-    {
+    public enum MoveCosts
+    {        
         Move = -1,
-        Turn = -1,
-        Attack = -1,
+        TurnRight = -1,
+        TurnLeft = -1, 
         Ammo = 10,
-        KillBug = 100,
-        Hole = -10000,
-        Cockroach = -10000
+        Attack = -10,
+        Cockroach = -10000,
+        FixBug = 100,
+        Debug = 0
     };
 }
