@@ -2,14 +2,17 @@
 % Dynamic procedures
 %-----------------------------------
 
-:- dynamic mart/2.
-:- dynamic Ammo/2.
+:- dynamic vortex/2.
+:- dynamic ammo/2.
+:- dynamic hole/2.
 :- dynamic trainer/2.
 :- dynamic visited/2.
 :- dynamic bug/3.
 :- dynamic ammoShine/2.
 :- dynamic spaceDistortions/2.
 :- dynamic stinkCockroach/2.
+:- dynamic breeze/2.
+:- dynamic binariesFlying/2.
 :- dynamic facing/1.
 :- dynamic at/2.
 :- dynamic visited/2. 
@@ -58,17 +61,16 @@ includeList(X,Y,L,L1) :- (not(visited(X,Y)) , (X > -1  , X < 42) , (Y > -1 , Y <
 % se o local acabou de ser visitado tira da lista
 takeList(X,Y,L,L1) :- delList(safe(X,Y),L,L1) , retract(safeLst(L)) , assert(safeLst(L1)) .
 
+% se nick está em X,Y, então este local foi visitado
+visited(X,Y) :- at(X,Y) .
 
-% se ash está em X,Y, então este local foi visitado
-% visited(X,Y) :- at(X,Y) .
-
-% se o ash esta em X,Y e não tem trainador ali, ali é seguro.
+% se o nick esta em X,Y e não tem uma barata ali, ali é seguro.
 safe(X,Y) :- safeLst(L) , isSafe(safe(X,Y),L) .
 
-
-putBuilding(X,Y,T) :- assert(groundType(X,Y,T)) .
+putBuilding(X,Y,T) :- assert(terrainType(X,Y,T)) .
 putAmmo(X,Y) :- not(ammo(X,Y)) , assert(ammo(X,Y)).
 putCockroach(X,Y) :- not(cockroach(X,Y)) , assert(cockroach(X,Y)) , safeLst(L) , takeList(X,Y,L,L1).
+putHole(X,Y) :- not(hole(X,Y)) ,assert(hole)
 rmvAmmo(X,Y) :- retract(ammo(X,Y)).
 rmvCockroach(X,Y) :- retract(cockroach(X,Y)) , not(safe(X,Y)) , safeLst(L) , includeList(X,Y,L,L1).
 
@@ -76,10 +78,8 @@ removeSafe(X,Y) :- safeLst(L) , ( takeList(X,Y,L,L1) ) .
 
 
 % verifica se é terreno
-iscomp(G) :-   (G == 71) ;
-			   (G == 76 , fire)  .
-
-allowed(X,Y) :- groundType(X,Y,G) , iscomp(G) .
+iscomp(T) :-   not(T == 495).
+allowed(X,Y) :- terrainType(X,Y,G) , iscomp(T) .
 
 setType(P) :- ( type(P,T) , type(P,K) , T \== K , assert(T) , assert(K) ) ; (type(P,K) , assert(K) ).
 
@@ -110,11 +110,20 @@ border(X,Y) :- X == 0 ; X == 41 ; Y == 0 ; Y == 41.
 % Perceptions
 %-----------------------------------
 
+% Se x-1, x+1, y-1, y+1 tem brilho então x,y é ammo 
 updAmmo(X,Y) :- (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , ammoShine(I,Y) , ammoShine(X,Iy) , ammoShine(D,Y) , ammoShine(X,Dy)), putAmmo(X,Y) . 
 
+% Se x-1, x+1, y-1, y+1 tem distorções então x,y é vortex 
 updVortex(X,Y) :- (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , spaceDistortions(I,Y) , spaceDistortions(X,Iy) , spaceDistortions(D,Y) , spaceDistortions(X,Dy)), putVortex(X,Y) .
 
-updCockRoach(X,Y) :-  
+% Se x-1, x+1, y-1, y+1 tem binarios então x,y é bug 
+updBug(X,Y) :- (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , binariesFlying(I,Y) , binariesFlying(X,Iy) , binariesFlying(D,Y) , binariesFlying(X,Dy)), putBug(X,Y) .
+
+% Se x-1, x+1, y-1, y+1 tem brisa então x,y é buracos 
+updHole(X,Y) :- (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , breeze(I,Y) , breeze(X,Iy) , breeze(D,Y) , breeze(X,Dy)), putHole(X,Y) .
+
+
+updCockroach(X,Y) :-  
 (X==0 , inc(Y,Iy) , dec(Y,Dy) , stinkCockroach(1,Y) , stinkCockroach(X,Iy)  , stinkCockroach(X,Dy) , putCockroach(X,Y) ) ;
 (X==41 , inc(Y,Iy) , dec(Y,Dy) , stinkCockroach(40,Y) , stinkCockroach(X,Iy)  , stinkCockroach(X,Dy) , putCockroach(X,Y) ) ;
 (Y==0 , inc(X,I) , dec(X,D) , stinkCockroach(X,1) , stinkCockroach(I,Y)  , stinkCockroach(D,Y) , putCockroach(X,Y) ) ;
@@ -126,9 +135,9 @@ updCockRoach(X,Y) :-
 (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , stinkCockroach(I,Y) , stinkCockroach(X,Iy)  , stinkCockroach(D,Y) , stinkCockroach(X,Dy) , putCockroach(X,Y)) .
 
 tryAmmo(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updAmmo(I,Y);true) , (updAmmo(X,Iy);true) , (updAmmo(D,Y);true) , (updAmmo(X,Dy);true) .
-tryTrainer(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updCockRoach(I,Y);true) , (updCockRoach(X,Iy);true) , (updCockRoach(D,Y);true) , (updCockRoach(X,Dy);true). 
+tryTrainer(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updCockroach(I,Y);true) , (updCockroach(X,Iy);true) , (updCockroach(D,Y);true) , (updCockroach(X,Dy);true). 
 
-trySeller(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updMart(I,Y);true) , (updMart(X,Iy);true) , (updMart(D,Y);true) , (updMart(X,Dy);true).
+tryVortex(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updVortex(I,Y);true) , (updVortex(X,Iy);true) , (updVortex(D,Y);true) , (updVortex(X,Dy);true).
 setSafe(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , safeLst(L) ,(
 
 				(( not(visited(I,Y)) , not(safe(I,Y)) ), ( not(visited(X,Iy)) , not(safe(X,Iy)) ) , ( not(visited(D,Y)) , not(safe(D,Y)) ) , ( not(visited(X,Dy)) , not(safe(X,Dy)))   , 
