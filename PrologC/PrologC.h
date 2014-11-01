@@ -34,37 +34,43 @@ namespace PrologC {
 		
 		static void updatePercp(PlEngine e , int x , int y , bool hasShine, bool hasCockroach, bool hasBreeze, bool hasDistortions, bool hasBinaries )
 		{
-			if(hasPerfum)
+			if(hasShine)
 			{
 				PlTermv av(2);
 				av[0] = x ;
 				av[1] = y ;
-				PlCall("updPerfum",av);
+				PlCall("updPerShine", av);
 			}
 			
-			{// Always call update trainer perceptions
+			{
 				PlTermv av(3);
 				av[0] = x ;
 				av[1] = y ;
-				av[2] = hasScreamT ;
-				PlCall("updPerScremT",av);
+				av[2] = hasCockroach ;
+				PlCall("updPerCockS", av);
 			}
 			
-			if(hasScremS)
+			if(hasBreeze)
 			{
 				PlTermv av(2);
 				av[0] = x ;
 				av[1] = y ;
-				PlCall("updPerScremS",av);
+				PlCall("updBreeze", av);
 			}
 
-			if(hasPoke)
+			if(hasDistortions)
 			{
-				PlTermv av(3);
+				PlTermv av(2);
 				av[0] = x ;
 				av[1] = y ;
-				av[2] = PlCompound( pokeName);
-				PlCall("updPokemon",av);
+				PlCall("updPerSpaceD", av);
+			}
+
+			if(hasBinaries){
+				PlTermv av(2);
+				av[0] = x ;
+				av[1] = y ;
+				PlCall("updPerBinaries", av);
 			}
 		
 		}
