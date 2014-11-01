@@ -1,6 +1,6 @@
 ﻿namespace Assemble.Controller
 {
-    public enum Enums
+    public enum BestMove
     {
         Move,
         TurnRight,
@@ -12,5 +12,16 @@
         KillBug,
         JumpVortex,
         Joker
+    };
+
+    public enum Costs
+    {
+        Move = -1,
+        Turn = -1,
+        Attack = -1,
+        Ammo = 10,
+        KillBug = 100,
+        Hole = -10000,
+        Cockroach = -10000
     };
 }
