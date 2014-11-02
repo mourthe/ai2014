@@ -67,7 +67,7 @@ visited(X,Y) :- at(X,Y) .
 % se o nick esta em X,Y e não tem uma barata ali, ali é seguro.
 safe(X,Y) :- safeLst(L) , isSafe(safe(X,Y),L) .
 
-putBuilding(X,Y,T) :- assert(terrainType(X,Y,T)) .
+putBuilding(X,Y,T) :- assert((X,Y)) .
 putAmmo(X,Y) :- not(ammo(X,Y)) , assert(ammo(X,Y)).
 putCockroach(X,Y) :- not(cockroach(X,Y)) , assert(cockroach(X,Y)) , safeLst(L) , takeList(X,Y,L,L1).
 putHole(X,Y) :- not(hole(X,Y)) ,assert(hole)
@@ -215,9 +215,9 @@ safeLst([]).
 inc(A, W) :- W is A + 1.
 dec(B, K) :- K is B - 1.
 
-bestMove(Attack(X,Y,R)) :- at(X,Y), cockroach(X,Y) ,  retract(cockroach(X,Y) ).
+bestMove(Attack(X,Y)) :- at(X,Y), cockroach(X,Y) ,  retract(cockroach(X,Y) ).
 
-bestMove(fixBug(P)) :- at(X,Y) , bug(X,Y,P) , retract(bug(X,Y,P)).
+bestMove(fixBug()) :- at(X,Y) , bug(X,Y) , retract(bug(X,Y)).
 
 bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D) , safe( D ,Y) , not(cockroach( D ,Y))  , not(visited(D,Y)) ,  allowed(D,Y) )
 											, assert(at(D,Y)) , retract(at(X,Y)) , assert(visited(D,Y))  ,removeSafe(D,Y) .
@@ -245,8 +245,6 @@ bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D)  , not(visi
 bestMove(moveDown(I,Y)) :- (at(X,Y) , X < 41 , facing(south) , inc(X,I)  , not(visited(I,Y)) ,allowed(I,Y) ) ),  assert(at(I,Y)) , retract(at(X,Y)) , assert(visited(I,Y)) .
 bestMove(moveRight(X,I)) :- (at(X,Y) , Y < 41  , facing(east) , inc(Y,I) , not(visited(X,I)) ,  allowed(X,I)) ) , assert(at(X,I)) , retract(at(X,Y)) , assert(visited(X,I)) .
 bestMove(moveLeft(X,D)) :- (at(X,Y) , Y > 0 ,  facing(west) , dec(Y,D) , not(visited(X,D)) , allowed(X,D) ) , assert(at(X,D)) , retract(at(X,Y)) , assert(visited(X,D)) .
-
-bestMove(aStar(Xg,Yg)) :- safeLst(L) , not(isEmpty(L)) , isAllowed(H,L) , H = safe(Xg,Yg) , ( takeList(Xg,Yg,L,LR) ) , retract(at(X,Y)) , assert(at(Xg,Yg)) , assert(visited(Xg,Yg)) .
 
 bestMove(debug(0,0)) .
 
