@@ -184,34 +184,40 @@ namespace PrologC {
 		/********************/
 		/* Assertions rules */
 		/********************/
-		static void putMart(int x, int y)
+		static void putVortex(int x, int y)
 		{
 			PlTermv av(2);
 			av[0] = x  ;
 			av[1] = y ;
-			PlCall("putMart",av);
+			PlCall("putVortex",av);
 		}
-		static void putPokeCenter(int x, int y)
+		static void putAmmo(int x, int y)
 		{
 			PlTermv av(2);
 			av[0] = x  ;
 			av[1] = y ;
-			PlCall("putPokeCenter",av);
+			PlCall("putVortex",av);
 		}
-		static void putTrainer(int x,int y)
+		static void putCock(int x,int y)
 		{
 			PlTermv av(2);
 			av[0] = x  ;
 			av[1] = y ;
-			PlCall("putTrainer",av);
+			PlCall("putVortex",av);
 		}
-		static void putGround(int x, int y, char t )
+		static void putBuilding(int x, int y)
 		{
 			PlTermv av(3);
 			av[0] = x  ;
 			av[1] = y ;
-			av[2] = t ;
-			PlCall("putGround",av);
+			PlCall("putVortex",av);
+		}
+		static void putBug(int x, int y)
+		{
+			PlTermv av(3);
+			av[0] = x  ;
+			av[1] = y ;
+			PlCall("putVortex",av);
 		}
 		
 		static void updFacing(char * direction)
@@ -235,29 +241,20 @@ namespace PrologC {
 		/**************************/
 
 
-		static void removeMart(int x, int y)
+		static void removeAmmo(int x, int y)
 		{
 			PlTermv av(2);
 			av[0] = x  ;
 			av[1] = y ;
-			PlCall("rmvMart",av);
+			PlCall("rmvAmmo",av);
 		}
-		static void removePokeCenter(int x, int y)
+		static void removeCockroach(int x,int y)
 		{
 			PlTermv av(2);
 			av[0] = x  ;
 			av[1] = y ;
-			PlCall("rmvPokeCenter",av);
+			PlCall("rmvCockroach",av);
 		}
-		static void removeTrainer(int x,int y)
-		{
-			PlTermv av(2);
-			av[0] = x  ;
-			av[1] = y ;
-			PlCall("rmvTrainer",av);
-		}
-
-
 		
 		static bool isMart(int x, int y)
 		{
@@ -340,7 +337,6 @@ namespace PrologC {
 			switch (predicate[0])
 			{
 			case 'm': ret[retIdx] = Move ; break;
-			case 'l':  ret[retIdx] = Launch ; break ;
 			case 't' :
 				{
 					BestMove turn ;
@@ -351,26 +347,11 @@ namespace PrologC {
 					ret[retIdx] = turn ;   
 					break;
 				}
-			case 'b' : 
-				{
-					BestMove doWat ;
-					if(predicate[1] == 'a')
-						doWat = Battle;
-					else
-						doWat = Buy;
-
-					ret[retIdx] = doWat ;   
-					
-					break;
-				}
-			case 'h' : ret[retIdx] = Heal ; break;
-			case 'a': ret[retIdx] = AStar ;  break;
-			case 'j' : ret[retIdx] = Joker ; break;
-			case 'k' : ret[retIdx] = KillGary ; break ;
-			case 'g' : ret[retIdx] = GoPokeCenter ; break ;
-			case 'c': ret[retIdx] = CatchPokemon; break;
+			case 'f' : ret[retIdx] = FixBug ;   break; 
+			case 'a' : ret[retIdx] = Attack ;   break; 
+			case 'd' : ret[retIdx] = Debug ; break;
 			default:
-				printf("predicado inesperado!"); exit(1);
+				printf("Acao retornada pelo prolog desconhecida!"); exit(1);
 				break;
 			}
 			retIdx++;
@@ -392,23 +373,19 @@ namespace PrologC {
 
 		}
 	
-		enum BestMove
-		{
-			Launch,
-			Heal,
-			Buy,
-			Battle,
-			Move,
-			TurnRight,
-			TurnLeft,
-			AStar ,
-			TurnBack,
-		    Joker ,
-			KillGary ,
-			GoPokeCenter ,
-			CatchPokemon ,
+    enum BestMove
+    {
+        Move,
+        TurnRight,
+        TurnLeft,
+        AStar, 
+        GetAmmo,
+        Attack,
+        FixBug,
+        JumpVortex,
+        Debug
+    };
 
-		};
 	};
 
 }

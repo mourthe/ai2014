@@ -101,33 +101,8 @@ namespace ManagedProlog {
 			PrologC::Prolog::safes();
 		}
 
-		static bool IsHurt()
-		{
-			return PrologC::Prolog::hurtPokemon();
-		}
-
-		static void Trainers()
-		{
-			PrologC::Prolog::trainers();
-		}
-
-		static void Pokemons()
-		{
-			PrologC::Prolog::pokemons();
-		}
-
-		static void ScreamsT()
-		{
-			PrologC::Prolog::screamsT();
-		}
-
-		static int Pokeballs()
-		{
-			return PrologC::Prolog::pokeballs();
-		}
 	private:
-		static void * eng;
-	
+		static void * eng;	
 
 	};
 }

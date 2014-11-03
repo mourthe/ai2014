@@ -13,7 +13,7 @@ namespace Assemble.Controller
         private int BugsFixed = 0;
 
         public AgentController(Map map)
-        {A
+        {
             _map = map;
         }
 
