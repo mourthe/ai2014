@@ -53,6 +53,32 @@ namespace Assemble
             this.J = j;
         }
 
+        public Point(int i, int j, int content) : this(i, j)
+        {
+            this.HasAmmo = this.HasBug = this.HasCockroach = this.HasHole = this.HasVortex = false;
+
+            switch (content)
+            {
+                case 1:
+                    this.HasAmmo = true;
+                    break;
+                case 2:
+                    this.HasBug = true;
+                    break;
+                case 3:
+                    this.HasCockroach = true;
+                    break;
+                case 4:
+                    this.HasHole = true;
+                    break;
+                case 5:
+                    this.HasVortex = true;
+                    break;
+                default:
+                    // nada
+            }   
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;

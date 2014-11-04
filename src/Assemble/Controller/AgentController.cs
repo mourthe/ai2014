@@ -13,7 +13,7 @@ namespace Assemble.Controller
         private int BugsFixed = 0;
 
         public AgentController(Map map)
-        {A
+        {
             _map = map;
         }
 
@@ -100,9 +100,6 @@ namespace Assemble.Controller
             {
                 Prolog.UpdPerc(from.J, from.I, hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
             }
-
-
-
         }
     }
 }

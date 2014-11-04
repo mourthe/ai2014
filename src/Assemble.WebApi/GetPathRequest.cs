@@ -12,7 +12,7 @@ namespace Assemble.WebApi
         [DataMember(Name = "terrain")]
         public List<int> Terrain { get; set; }
 
-        [DataMember(Name = "characters")]
-        public List<Character> Characters { get; set; }
+        [DataMember(Name = "elements")]
+        public List<int> Elements { get; set; }
     }
 }

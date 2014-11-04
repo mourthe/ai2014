@@ -19,7 +19,7 @@ namespace Assemble.WebApi
             var response = new GetPathResponse();
             double cost;
             IList<string> party;
-            response.Steps = AssembleService.GetBestPath(request.Terrain, request.Characters, out cost, out party);
+            response.Steps = AssembleService.GetBestPath(request.Terrain, request.Elements, out cost, out party);
             response.Cost = cost;
             response.Visited = party;
 
