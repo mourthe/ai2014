@@ -45,7 +45,6 @@ namespace Assemble.Controller
                             updatePerceptions(action.point); 
                             break;
                         case BestMove.Debug:
-                            goto debug;
                             break;
                         case BestMove.GetAmmo:
                             updatePerceptions(action.point);

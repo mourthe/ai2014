@@ -39,36 +39,6 @@ namespace ManagedProlog {
 			return PrologC::Prolog::isSafe(x,y);
 		}
 
-		static void PutGround(int x, int y, char t )
-		{			
-			PrologC::Prolog::putGround(x,y,t);
-		}
-		static void PutMart(int x, int y )
-		{			
-			PrologC::Prolog::putMart(x,y);
-		}
-		static void PutPokeCenter(int x, int y)
-		{			
-			PrologC::Prolog::putPokeCenter(x,y);
-		}
-		static void PutTrainer(int x, int y )
-		{			
-			PrologC::Prolog::putTrainer(x,y);
-		}
-
-		static void RemoveMart(int x, int y )
-		{			
-			PrologC::Prolog::removeMart(x,y);
-		}
-		static void RemovePokeCenter(int x, int y)
-		{			
-			PrologC::Prolog::removePokeCenter(x,y);
-		}
-		static void RemoveTrainer(int x, int y )
-		{			
-			PrologC::Prolog::removeTrainer(x,y);
-		}
-
 		static bool IsMart(int x, int y)
 		{
 			return PrologC::Prolog::isMart(x,y);

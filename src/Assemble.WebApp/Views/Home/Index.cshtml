@@ -120,35 +120,46 @@
 				.createWorld(function (tiledmap) {
 
 				});	            
-
+	            window.elemCodes = Array.apply(null, new Array(1764)).map(Number.prototype.valueOf, 0);
 	            window.lokis = getElements(20);
 	            window.lokis.forEach(function (character) {
 	                Crafty.e("2D, DOM, Loki")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	                idx = character.position.j + (42 * character.position.i);
+	                window.elemCodes[idx] = 2;
+
 	            });
 
 	            window.cockroaches = getElements(100);
 	            window.cockroaches.forEach(function (character) {
 	                Crafty.e("2D, DOM, Cockroach")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	                idx = character.position.j + (42 * character.position.i);
+	                window.elemCodes[idx] = 3;
 	            });
 
 	            window.bullets = getElements(30);
 	            window.bullets.forEach(function (character) {
 	                Crafty.e("2D, DOM, Bullet")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	                idx = character.position.j + (42 * character.position.i);
+	                window.elemCodes[idx] = 1;
 	            });
 
 	            window.hole = getElements(50);
 	            window.hole.forEach(function (character) {
 	                Crafty.e("2D, DOM, Hole")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	                idx = character.position.j + (42 * character.position.i);
+	                window.elemCodes[idx] = 4;
 	            });
 
 	            window.vortex = getElements(20);
 	            window.vortex.forEach(function (character) {
 	                Crafty.e("2D, DOM, Vortex")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
+	                idx = character.position.j + (42 * character.position.i);
+	                window.elemCodes[idx] = 5;
 	            });
 
 
@@ -188,8 +199,7 @@
 	           $("#assemble").click(function () {
 	               var reqData = {};
 	               reqData["terrain"] = SOURCE_FROM_TILED_MAP_EDITOR.layers[0].data;
-	               reqData["cockroaches"] = window.cockroaches;
-	               reqData["lokis"] = window.lokis;
+	               reqData["elements"] = window.elemCodes;
 	               $.ajax({
 	                   url: "api/path",
 	                   type: "post",
@@ -217,7 +227,7 @@
 	                           if (movement == 'w') {
 	                               window.Player.animate("walk_right", 10, 5); window.Player.move("w", 20);
 	                           }
-	                       }, 350 * i);
+	                       }, 300 * i);
 	                       i++;
 	                   });
 
