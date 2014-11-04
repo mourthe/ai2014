@@ -68,17 +68,19 @@ visited(X,Y) :- at(X,Y) .
 safe(X,Y) :- safeLst(L) , isSafe(safe(X,Y),L) .
 
 putBuilding(X,Y,T) :- assert((X,Y)) .
-putAmmo(X,Y) :- not(ammo(X,Y)) , assert(ammo(X,Y)).
 putCockroach(X,Y) :- not(cockroach(X,Y)) , assert(cockroach(X,Y)) , safeLst(L) , takeList(X,Y,L,L1).
-putHole(X,Y) :- not(hole(X,Y)) ,assert(hole)
-rmvAmmo(X,Y) :- retract(ammo(X,Y)).
+putHole(X,Y) :-not(vortex(X,Y)) , assert(vortex(X,Y)) , safeLst(L) , takeList(X,Y,L,L1).
+putVortex(X,Y) :- not(vortex(X,Y)) , assert(vortex(X,Y)) , safeLst(L) , takeList(X,Y,L,L1).
+putTerrain(X,Y,T) :- assert(terrainType(X,Y,T)).
+
 rmvCockroach(X,Y) :- retract(cockroach(X,Y)) , not(safe(X,Y)) , safeLst(L) , includeList(X,Y,L,L1).
 
 removeSafe(X,Y) :- safeLst(L) , ( takeList(X,Y,L,L1) ) . 
 
 % verifica se é terreno
 iscomp(T) :-   not(T == 495).
-allowed(X,Y) :- terrainType(X,Y,G) , iscomp(T) .
+allowed(X,Y) :- terrainType(X,Y,T) , iscomp(T) .
+
 
 distance_min(L,MinXY ) :-  at(X,Y) , distance_min(L, X, Y, MinXY).
 distance_min(L, X0, Y0, MinXY) :-    aggregate( min(D, [Xt,Yt]) , (member([Xt,Yt], L) , D is sqrt((Xt-X0)^2+(Yt-Y0)^2)), MinXY).
@@ -105,14 +107,8 @@ border(X,Y) :- X == 0 ; X == 41 ; Y == 0 ; Y == 41.
 % Perceptions
 %-----------------------------------
 
-% Se x-1, x+1, y-1, y+1 tem brilho então x,y é ammo 
-updAmmo(X,Y) :- (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , ammoShine(I,Y) , ammoShine(X,Iy) , ammoShine(D,Y) , ammoShine(X,Dy)), putAmmo(X,Y) . 
-
 % Se x-1, x+1, y-1, y+1 tem distorções então x,y é vortex 
 updVortex(X,Y) :- (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , spaceDistortions(I,Y) , spaceDistortions(X,Iy) , spaceDistortions(D,Y) , spaceDistortions(X,Dy)), putVortex(X,Y) .
-
-% Se x-1, x+1, y-1, y+1 tem binarios então x,y é bug 
-updBug(X,Y) :- (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , binariesFlying(I,Y) , binariesFlying(X,Iy) , binariesFlying(D,Y) , binariesFlying(X,Dy)), putBug(X,Y) .
 
 % Se x-1, x+1, y-1, y+1 tem brisa então x,y é buracos 
 updHole(X,Y) :- (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , breeze(I,Y) , breeze(X,Iy) , breeze(D,Y) , breeze(X,Dy)), putHole(X,Y) .
@@ -128,14 +124,11 @@ updCockroach(X,Y) :-
 (X==41 , Y=41 , dec(X,D) , dec(Y,Dy) , stinkCockroach(X,Dy) , stinkCockroach(D,Y) , putCockroach(X,Y) ) ;  
 (inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , stinkCockroach(I,Y) , stinkCockroach(X,Iy)  , stinkCockroach(D,Y) , stinkCockroach(X,Dy) , putCockroach(X,Y)) .
 
-tryAmmo(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updAmmo(I,Y);true) , (updAmmo(X,Iy);true) , (updAmmo(D,Y);true) , (updAmmo(X,Dy);true) .
-
 tryCockroach(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updCockroach(I,Y);true) , (updCockroach(X,Iy);true) , (updCockroach(D,Y);true) , (updCockroach(X,Dy);true). 
 
 tryVortex(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updVortex(I,Y);true) , (updVortex(X,Iy);true) , (updVortex(D,Y);true) , (updVortex(X,Dy);true).
 
-tryHole(X,Y) :- inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updAmmo(I,Y);true) , (updAmmo(X,Iy);true) , (updAmmo(D,Y);true) , (updAmmo(X,Dy);true) .
-
+tryHole(X,Y) :- inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , (updHole(I,Y);true) , (updHole(X,Iy);true) , (updHole(D,Y);true) , (updHole(X,Dy);true) .
 
 setSafe(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , safeLst(L) ,(
 
@@ -184,7 +177,7 @@ setSafe(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , safeLst(L) ,(
 				((visited(I,Y) ; safe(I,Y) )	  ,(visited(X,Iy) ; safe(X,Iy) ) 	   ,(visited(D,Y) ; safe(D,Y) ) 	  , (not(visited(X,Dy)),not(safe(X,Dy))) , 
 					includeList(X,Dy,L,L4) ) )  .
 
-updPerShine(X,Y) :-  assert(ammoShine(X,Y)) , tryAmmo(X,Y) .
+updPerShine(X,Y) :-  not(ammo(X,Y)),  assert(ammo(X,Y)).
 updPerSpaceD(X,Y) :- assert(spaceDistortions(X,Y)) , tryVortex(X,Y) .
 updPerCockS(X,Y,COCKS) :- (COCKS == 1 , assert(stinkCockroach(X,Y)) , tryCockroach(X,Y)) ; (COCKS == 0 , setSafe(X,Y)) . 
 updPerBinaries(X,Y,P) :- not(bug(X,Y) , assert(bug(X,Y)).
