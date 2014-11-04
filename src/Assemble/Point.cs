@@ -75,6 +75,7 @@ namespace Assemble
                     this.HasVortex = true;
                     break;
                 default:
+                    break;
                     // nada
             }   
         }

@@ -17,6 +17,8 @@
 :- dynamic at/2.
 :- dynamic visited/2. 
 :- dynamic safeLst/1 .
+:- dynamic cockroach/2.
+:- dynamic terrainType/3.
 
 
 %-----------------------------------
@@ -85,7 +87,6 @@ allowed(X,Y) :- terrainType(X,Y,T) , iscomp(T) .
 distance_min(L,MinXY ) :-  at(X,Y) , distance_min(L, X, Y, MinXY).
 distance_min(L, X0, Y0, MinXY) :-    aggregate( min(D, [Xt,Yt]) , (member([Xt,Yt], L) , D is sqrt((Xt-X0)^2+(Yt-Y0)^2)), MinXY).
 
-nrstAmmo(X,Y) :- setof([Xs,Ys], Ammo(Xs,Ys),L) , distance_min(L,MinXY) , MinXY = min(D,[X,Y]) .
 
 nrstCockroach(X,Y) :- setof([Xs,Ys], cockroach(Xs,Ys),L) , distance_min(L,MinXY) , MinXY = min(D,[X,Y]) .
 
@@ -180,9 +181,9 @@ setSafe(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , safeLst(L) ,(
 updPerShine(X,Y) :-  not(ammo(X,Y)),  assert(ammo(X,Y)).
 updPerSpaceD(X,Y) :- assert(spaceDistortions(X,Y)) , tryVortex(X,Y) .
 updPerCockS(X,Y,COCKS) :- (COCKS == 1 , assert(stinkCockroach(X,Y)) , tryCockroach(X,Y)) ; (COCKS == 0 , setSafe(X,Y)) . 
-updPerBinaries(X,Y,P) :- not(bug(X,Y) , assert(bug(X,Y)).
+updPerBinaries(X,Y,P) :- not(bug(X,Y)) , assert(bug(X,Y)).
 updFacing(D) :- retract(facing(X)) , assert(facing(D)).
-updBreeze(X,Y) :- assert(breeze(X,Y), tryHole(X,Y).
+updBreeze(X,Y) :- assert(breeze(X,Y)), tryHole(X,Y).
 
 %-----------------------------------
 % End of perceptions
@@ -208,9 +209,9 @@ safeLst([]).
 inc(A, W) :- W is A + 1.
 dec(B, K) :- K is B - 1.
 
-bestMove(Attack(X,Y)) :- at(X,Y), cockroach(X,Y) ,  retract(cockroach(X,Y) ).
+bestMove(attack(X,Y)) :- at(X,Y), cockroach(X,Y) ,  retract(cockroach(X,Y)).
 
-bestMove(fixBug()) :- at(X,Y) , bug(X,Y) , retract(bug(X,Y)).
+bestMove(fixBug(X,Y)) :- at(X,Y) , bug(X,Y) , retract(bug(X,Y)).
 
 bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D) , safe( D ,Y) , not(cockroach( D ,Y))  , not(visited(D,Y)) ,  allowed(D,Y) )
 											, assert(at(D,Y)) , retract(at(X,Y)) , assert(visited(D,Y))  ,removeSafe(D,Y) .
@@ -234,9 +235,9 @@ bestMove(turnLeft) :- 	(facing(north) , at(X,Y) , dec(X,D) , dec(Y,DY) , (not(sa
 						(facing(east) ,  at(X,Y) , inc(Y,I) , dec(X,D)  , (not(safe(X,I)) ; not(allowed(X,I)) ; visited(X,I) )  , safe(D,Y)  ,allowed(D,Y) , not(visited(D,Y)) ,  assert(facing(north)) , retract(facing(east)) );
 						(facing(west) ,  at(X,Y) , dec(Y,D) , inc(X,I)  , (not(safe(X,D)) ; not(allowed(X,D)) ; visited(X,D) )  , safe(I,Y)  ,allowed(I,Y) , not(visited(I,Y)) ,  assert(facing(south)) , retract(facing(west)) ).
 
-bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D)  , not(visited(D,Y)) ,  allowed(D,Y)  ) ) , assert(at(D,Y)) , retract(at(X,Y)) , assert(visited(D,Y)) .
-bestMove(moveDown(I,Y)) :- (at(X,Y) , X < 41 , facing(south) , inc(X,I)  , not(visited(I,Y)) ,allowed(I,Y) ) ),  assert(at(I,Y)) , retract(at(X,Y)) , assert(visited(I,Y)) .
-bestMove(moveRight(X,I)) :- (at(X,Y) , Y < 41  , facing(east) , inc(Y,I) , not(visited(X,I)) ,  allowed(X,I)) ) , assert(at(X,I)) , retract(at(X,Y)) , assert(visited(X,I)) .
+bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D)  , not(visited(D,Y)) ,  allowed(D,Y)  )  , assert(at(D,Y)) , retract(at(X,Y)) , assert(visited(D,Y)) .
+bestMove(moveDown(I,Y)) :- (at(X,Y) , X < 41 , facing(south) , inc(X,I)  , not(visited(I,Y)) ,allowed(I,Y) ) ,  assert(at(I,Y)) , retract(at(X,Y)) , assert(visited(I,Y)) .
+bestMove(moveRight(X,I)) :- (at(X,Y) , Y < 41  , facing(east) , inc(Y,I) , not(visited(X,I)) ,  allowed(X,I))  , assert(at(X,I)) , retract(at(X,Y)) , assert(visited(X,I)) .
 bestMove(moveLeft(X,D)) :- (at(X,Y) , Y > 0 ,  facing(west) , dec(Y,D) , not(visited(X,D)) , allowed(X,D) ) , assert(at(X,D)) , retract(at(X,Y)) , assert(visited(X,D)) .
 
 bestMove(debug(0,0)) .

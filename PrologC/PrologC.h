@@ -114,73 +114,6 @@ namespace PrologC {
 			
 		}
 
-		static bool hurtPokemon()
-		{
-			PlTermv av(1);
-			
-			PlQuery q("isHurt" ,av);
-			q.next_solution();
-			return ( (int) av[0] ) == 1;
-			
-		}
-		
-		static void trainers()
-		{
-			PlTermv av(2);
-
-			PlQuery q("trainer",av);
-
-			System::Console::WriteLine("----trainers----");
-			while( q.next_solution() )
-			{
-				System::Console::WriteLine("{0},{1}",(int)av[0],(int)av[1]);
-			}
-			System::Console::WriteLine("----END trainers----");
-			
-		}
-				
-		static void pokemons()
-		{
-			PlTermv av(3);
-
-			PlQuery q("pokemon",av);
-
-			System::Console::WriteLine("----pokemons----");
-			while( q.next_solution() )
-			{
-				char * poke = (char *) av[2];
-				
-				System::Console::WriteLine("{0},{1},{2}{3}{4}",(int)av[0],(int)av[1], poke[0],poke[1],poke[2] );
-			}
-			System::Console::WriteLine("----END pokemons----");
-			
-		}
-		
-		static void screamsT()
-		{
-			PlTermv av(2);
-
-			PlQuery q("screamTrainer",av);
-
-			System::Console::WriteLine("----screams gary----");
-			while( q.next_solution() )
-			{
-				System::Console::WriteLine("{0},{1}",(int)av[0],(int)av[1] );
-			}
-			System::Console::WriteLine("----END screams gary----");
-		}
-
-		static int pokeballs()
-		{
-			PlTermv av(1);
-
-			PlQuery q("pokeball",av);
-			q.next_solution();
-
-			return (int)av[0];
-
-		}
-
 		/********************/
 		/* Assertions rules */
 		/********************/
@@ -196,28 +129,30 @@ namespace PrologC {
 			PlTermv av(2);
 			av[0] = x  ;
 			av[1] = y ;
-			PlCall("putVortex",av);
+			PlCall("putAmmo",av);
 		}
 		static void putCock(int x,int y)
 		{
 			PlTermv av(2);
 			av[0] = x  ;
 			av[1] = y ;
-			PlCall("putVortex",av);
-		}
-		static void putBuilding(int x, int y)
-		{
-			PlTermv av(3);
-			av[0] = x  ;
-			av[1] = y ;
-			PlCall("putVortex",av);
+			PlCall("putCock",av);
 		}
 		static void putBug(int x, int y)
 		{
+			PlTermv av(2);
+			av[0] = x  ;
+			av[1] = y ;
+			PlCall("putBug",av);
+		}
+
+		static void putTerrain(int x, int y, int t)
+		{
 			PlTermv av(3);
 			av[0] = x  ;
 			av[1] = y ;
-			PlCall("putVortex",av);
+			av[2] = t ;
+			PlCall("putTerrain",av);
 		}
 		
 		static void updFacing(char * direction)

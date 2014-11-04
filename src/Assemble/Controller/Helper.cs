@@ -22,6 +22,11 @@ namespace Assemble.Controller
             // Prolog.PutCockroach(x, y);
         }
 
+        public static void PutTerrain(int x, int y, int t)
+        {
+            Prolog.PutTerrain(x, y, t);
+        }
+
         public static void PutAmmo(int x, int y)
         {
             // Prolog.PutAmmo(x, y);

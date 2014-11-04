@@ -44,6 +44,11 @@ namespace ManagedProlog {
 			return PrologC::Prolog::isMart(x,y);
 		}
 
+		static void PutTerrain(int x, int y, int t)
+		{
+			PrologC::Prolog::putTerrain(x,y,t);
+		}
+
 		
 		static bool IsPokeCenter(int x, int y)
 		{

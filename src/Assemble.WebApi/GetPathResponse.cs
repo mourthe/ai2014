@@ -16,6 +16,6 @@ namespace Assemble.WebApi
         public IList<string> Visited { get; set; }
 
         [DataMember(Name = "cost")]
-        public double Cost { get; set; }
+        public List<int> Cost { get; set; }
     }
 }

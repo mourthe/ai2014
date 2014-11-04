@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Assemble.AStar;
 using Assemble.Controller;
+using ManagedProlog;
 
 namespace Assemble
 {
@@ -23,12 +24,13 @@ namespace Assemble
         private readonly int _size;
         public List<Character> CharactersWithNick { get; private set; }
 
-        public Map(IList<int> terrain, IList<int> content, int size = 42) 
+        public Map(IList<int> terrain, IList<int> elements, int size = 42) 
         {
+            unsafe { Prolog.Initilize(Helper.StrToSbt(@"C:\Projects\ai2014\Prolog\rules.pl")); }
             _size = size;
             this.Result = null;
             this.Points = new Point[_size, _size];
-            this.BuildTerrain(terrain, content);
+            this.BuildTerrain(terrain, elements);
             
             // copia charactersWithNick e o tira da lista
             // this.CharactersWithNick = characters.ToList();
@@ -95,7 +97,7 @@ namespace Assemble
                 for (var j = 0; j < _size; x++, j++)
                 {
                     this.Points[i, j] = new Point(i, j, content.ElementAt(x));
-
+                    Helper.PutTerrain(j, i, terrain.ElementAt(x));
                 } 
             }
         }

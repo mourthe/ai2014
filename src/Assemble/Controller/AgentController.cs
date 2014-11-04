@@ -23,41 +23,51 @@ namespace Assemble.Controller
    
             while (BugsFixed < 20)
             {
-                unsafe { 
-                    var action = new Helper.Action(Prolog.BestMove()); 
-                    if(BugsFixed == 10){
-                        //remover vórtices
-                    }
-                    if(BugsFixed == 14){
-                        //remover baratas
-                    }
-                    if(BugsFixed == 18){
-                        //remover buracos
-                    }
-
-                    switch (action.move)
+                unsafe {
+                    try
                     {
-                        case BestMove.Attack:
-                            _map.Points[action.point.I, action.point.J].HasCockroach = false;
-                            //ENVIAR INFO DE BARATA MORTA
-                            break;
-                        case BestMove.Move: 
-                            updatePerceptions(action.point); 
-                            break;
-                        case BestMove.Debug:
-                            break;
-                        case BestMove.GetAmmo:
-                            updatePerceptions(action.point);
-                            break;
-                        case BestMove.FixBug:
-                            BugsFixed++;
-                            updatePerceptions(action.point);
-                            break;
-                        default:
-                            break;
-                    }
+                        var action = new Helper.Action(Prolog.BestMove());
+                        if (BugsFixed == 10)
+                        {
+                            //remover vórtices
+                        }
+                        if (BugsFixed == 14)
+                        {
+                            //remover baratas
+                        }
+                        if (BugsFixed == 18)
+                        {
+                            //remover buracos
+                        }
 
-                    actions.Add(action.move.ToString());
+                        switch (action.move)
+                        {
+                            case BestMove.Attack:
+                                _map.Points[action.point.I, action.point.J].HasCockroach = false;
+                                //ENVIAR INFO DE BARATA MORTA
+                                break;
+                            case BestMove.Move:
+                                updatePerceptions(action.point);
+                                break;
+                            case BestMove.Debug:
+                                break;
+                            case BestMove.GetAmmo:
+                                updatePerceptions(action.point);
+                                break;
+                            case BestMove.FixBug:
+                                BugsFixed++;
+                                updatePerceptions(action.point);
+                                break;
+                            default:
+                                break;
+                        }
+
+                        actions.Add(action.move.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
                 }
             }
 
