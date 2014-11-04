@@ -99,9 +99,6 @@ namespace Assemble.Controller
             {
                 Prolog.UpdPerc(from.J, from.I, hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
             }
-
-
-
         }
     }
 }

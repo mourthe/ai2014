@@ -23,24 +23,20 @@ namespace Assemble
         private readonly int _size;
         public List<Character> CharactersWithNick { get; private set; }
 
-        /// <summary>
-        /// Construtor da classe Map
-        /// </summary>
-        /// <param name="characters">Lista com todos os personagens inclusive a casa do nick</param>
-        public Map(IList<int> terrain, IList<Character> characters, int size = 42) 
+        public Map(IList<int> terrain, IList<int> content, int size = 42) 
         {
             _size = size;
             this.Result = null;
             this.Points = new Point[_size, _size];
-            this.BuildTerrain(terrain);
+            this.BuildTerrain(terrain, content);
             
             // copia charactersWithNick e o tira da lista
-            this.CharactersWithNick = characters.ToList();
-            characters.RemoveAt(0);
+            // this.CharactersWithNick = characters.ToList();
+            // characters.RemoveAt(0);
 
-            this.Characters = this.CreateCharacters(characters);
-//            this.InitializeResult();
-            //Mapa tá pronto, vc tem o mapa!
+            //this.Characters = this.CreateCharacters(characters);
+            // this.InitializeResult();
+            // Mapa tá pronto, vc tem o mapa!
         }
 
         private IList<Character> CreateCharacters(IList<Character> characters)
@@ -93,12 +89,13 @@ namespace Assemble
             return (int)((MoveCosts)System.Enum.Parse(typeof(MoveCosts), action, true));
         }
 
-        private void BuildTerrain (IList<int> terrain){
+        private void BuildTerrain (IList<int> terrain, IList<int> content ){
             for (int x = 0, i = 0; i < _size; i++)
             {
                 for (var j = 0; j < _size; x++, j++)
                 {
-                    this.Points[i, j] = new Point(i, j, (Terrain)terrain.ElementAt(x));
+                    this.Points[i, j] = new Point(i, j, content.ElementAt(x));
+
                 } 
             }
         }
