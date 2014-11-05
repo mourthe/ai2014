@@ -58,32 +58,37 @@ namespace Assemble.Controller
             public Point point;
             public bool win;
 
-            public unsafe Action(int* actionParameters){
+            public unsafe Action(int* actionParameters, Map map){
                 int i = 0;
                 int[] actionParams = new int[5];
 
                 while (actionParameters[i] != -1)
                 {
-                    actionParams[i] = actionParams[i];
+                    actionParams[i] = actionParameters[i];
                     i++;
                 }
            
                 if (actionParams != null && actionParams.Length >= 1)
                 {
-                    switch ((BestMove)actionParams[0])
+                    var destPoint = new Point(0, 0);
+                    var move = (BestMove)actionParams[0];
+                    switch (move)
                     {
                         case BestMove.Move:
                         case BestMove.AStar:
                         case BestMove.Debug:
                         case BestMove.GetAmmo:
                         case BestMove.FixBug:
-                            point = new Point(actionParams[1], actionParams[2]);
+                            //Trocando x por y por que usamos i e j
+                            destPoint = map.Points[actionParams[1], actionParams[2]];
                             break;
                         case BestMove.Attack:
-                            point = new Point(actionParams[1], actionParams[2]);
+                            destPoint = map.Points[actionParams[1], actionParams[2]];
                             break;
 
                     }
+                    this.move = move;
+                    this.point = destPoint;
                 }
                 else {
                     throw new Exception("Não pude ler os parâmetros da action");

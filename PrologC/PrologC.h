@@ -42,7 +42,7 @@ namespace PrologC {
 				PlCall("updPerShine", av);
 			}
 			
-			{
+			if(hasCockroach){
 				PlTermv av(3);
 				av[0] = x ;
 				av[1] = y ;
@@ -64,6 +64,13 @@ namespace PrologC {
 				av[0] = x ;
 				av[1] = y ;
 				PlCall("updPerSpaceD", av);
+			}
+
+			if(!(hasCockroach && hasBreeze && hasDistortions)){
+				PlTermv av(2);
+				av[0] = x ;
+				av[1] = y ;
+				PlCall("setSafe", av);
 			}
 
 			if(hasBinaries){

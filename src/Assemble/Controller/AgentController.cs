@@ -20,13 +20,13 @@ namespace Assemble.Controller
         public IList<string> Walk()
         {
             var actions = new List<string>();
-   
+            updatePerceptions(_map.Points[22,18]);
             while (_bugsFixed < 20)
             {
                 unsafe {
                     try
                     {
-                        var action = new Helper.Action(Prolog.BestMove());
+                        var action = new Helper.Action(Prolog.BestMove(), this._map);
                         if (_bugsFixed == 10)
                         {
                             _map.RemoveVortex();
@@ -107,7 +107,7 @@ namespace Assemble.Controller
             
             unsafe
             {
-                Prolog.UpdPerc(from.J, from.I, hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
+                Prolog.UpdPerc(from.I, from.J,hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
             }
         }
     }
