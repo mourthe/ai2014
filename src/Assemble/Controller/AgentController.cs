@@ -107,7 +107,7 @@ namespace Assemble.Controller
             
             unsafe
             {
-                Prolog.UpdPerc(from.I, from.J,hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
+                Prolog.UpdPerc(from.I, from.J, hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
             }
         }
     }

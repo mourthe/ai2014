@@ -66,7 +66,7 @@ namespace PrologC {
 				PlCall("updPerSpaceD", av);
 			}
 
-			if(!(hasCockroach && hasBreeze && hasDistortions)){
+			if(!hasCockroach && !hasBreeze && !hasDistortions){
 				PlTermv av(2);
 				av[0] = x ;
 				av[1] = y ;
