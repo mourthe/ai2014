@@ -9,8 +9,8 @@ namespace Assemble.Controller
 {
     public class AgentController
     {
-        private Map _map;
-        private int BugsFixed = 0;
+        private readonly Map _map;
+        private int _bugsFixed = 0;
 
         public AgentController(Map map)
         {
@@ -21,23 +21,23 @@ namespace Assemble.Controller
         {
             var actions = new List<string>();
    
-            while (BugsFixed < 20)
+            while (_bugsFixed < 20)
             {
                 unsafe {
                     try
                     {
                         var action = new Helper.Action(Prolog.BestMove());
-                        if (BugsFixed == 10)
+                        if (_bugsFixed == 10)
                         {
-                            //remover vórtices
+                            RemoveVortex();
                         }
-                        if (BugsFixed == 14)
+                        if (_bugsFixed == 14)
                         {
-                            //remover baratas
+                            RemoveCocks();
                         }
-                        if (BugsFixed == 18)
+                        if (_bugsFixed == 18)
                         {
-                            //remover buracos
+                            RemoveHoles();
                         }
 
                         switch (action.move)
@@ -45,6 +45,7 @@ namespace Assemble.Controller
                             case BestMove.Attack:
                                 _map.Points[action.point.I, action.point.J].HasCockroach = false;
                                 //ENVIAR INFO DE BARATA MORTA
+                                // ele pode atacar o lugar errado?
                                 break;
                             case BestMove.Move:
                                 updatePerceptions(action.point);
@@ -55,7 +56,7 @@ namespace Assemble.Controller
                                 updatePerceptions(action.point);
                                 break;
                             case BestMove.FixBug:
-                                BugsFixed++;
+                                _bugsFixed++;
                                 updatePerceptions(action.point);
                                 break;
                             default:
@@ -103,11 +104,43 @@ namespace Assemble.Controller
             if ((up != null && up.HasBug) || (down != null && down.HasBug)
                 || (left != null && left.HasBug) || (right != null && right.HasBug))
                 hasBinaries = true;
-
-
+            
             unsafe
             {
                 Prolog.UpdPerc(from.J, from.I, hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
+            }
+        }
+
+        private void RemoveVortex()
+        {
+            for (var i = 0; i < _map.Points.Length; i++)
+            {
+                for (var j = 0; j < _map.Points.Length; j++)
+                {
+                    _map.Points[i, j].HasVortex = false;
+                }
+            }
+        }
+
+        private void RemoveCocks()
+        {
+            for (var i = 0; i < _map.Points.Length; i++)
+            {
+                for (var j = 0; j < _map.Points.Length; j++)
+                {
+                    _map.Points[i, j].HasCockroach = false;
+                }
+            }
+        }
+
+        private void RemoveHoles()
+        {
+            for (var i = 0; i < _map.Points.Length; i++)
+            {
+                for (var j = 0; j < _map.Points.Length; j++)
+                {
+                    _map.Points[i, j].HasHole = false;
+                }
             }
         }
     }
