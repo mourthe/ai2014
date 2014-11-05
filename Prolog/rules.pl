@@ -180,7 +180,7 @@ setSafe(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , safeLst(L) ,(
 
 updPerShine(X,Y) :-  not(ammo(X,Y)),  assert(ammo(X,Y)).
 updPerSpaceD(X,Y) :- assert(spaceDistortions(X,Y)) , tryVortex(X,Y) .
-updPerCockS(X,Y,COCKS) :- (COCKS == 1 , assert(stinkCockroach(X,Y)) , tryCockroach(X,Y)) . 
+updPerCockS(X,Y) :- assert(stinkCockroach(X,Y)) , tryCockroach(X,Y). 
 updPerBinaries(X,Y,P) :- not(bug(X,Y)) , assert(bug(X,Y)).
 updFacing(D) :- retract(facing(X)) , assert(facing(D)).
 updBreeze(X,Y) :- assert(breeze(X,Y)), tryHole(X,Y).
@@ -209,7 +209,7 @@ safeLst([]).
 inc(A, W) :- W is A + 1.
 dec(B, K) :- K is B - 1.
 
-bestMove(attack(Y,I)) :- 	at(22,18), facing(east), inc(Y,I), stinkCockroach(X,Y), retract(cockroach(X,I).
+bestMove(attack(Y,I)) :- 	at(18,22), facing(east), inc(Y,I), stinkCockroach(X,Y), retract(cockroach(X,I)).
 
 bestMove(attack(X,Y)) :- 	stinkCockroach(X,Y) , ((at(X,Y), facing(north), dec(Y,D), cockroach(X,D), retract(cockroach(X,D))) ;
 													(at(X,Y), facing(south), inc(Y,I), cockroach(X,I), retract(cockroach(X,I))) ;
