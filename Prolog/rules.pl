@@ -209,7 +209,10 @@ safeLst([]).
 inc(A, W) :- W is A + 1.
 dec(B, K) :- K is B - 1.
 
-bestMove(attack(X,Y)) :- at(X,Y), cockroach(X,Y) ,  retract(cockroach(X,Y)).
+bestMove(attack(X,Y)) :- 	((at(X,Y), facing(north), dec(Y,D), cockroach(X,D)) ;
+							(at(X,Y), facing(south), inc(Y,I), cockroach(X,I)) ;
+							(at(X,Y), facing(west), dec(X,D), cockroach(D,Y)) ; 
+							(at(X,Y), facing(east), inc(X,I), cockroach(I,Y))) ,  retract(cockroach(X,Y)).
 
 bestMove(fixBug(X,Y)) :- at(X,Y) , bug(X,Y) , retract(bug(X,Y)).
 
