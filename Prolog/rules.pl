@@ -209,7 +209,7 @@ safeLst([]).
 inc(A, W) :- W is A + 1.
 dec(B, K) :- K is B - 1.
 
-bestMove(attack(X,Y)) :- 	at(18,22), stinkCockroach(X,Y).
+bestMove(attack(I,Y)) :- 	at(18,22), facing(east), inc(X,I) stinkCockroach(X,Y).
 
 bestMove(attack(X,Y)) :- 	stinkCockroach(X,Y) , ((at(X,Y), facing(north), dec(Y,D), cockroach(X,D), retract(cockroach(X,D))) ;
 													(at(X,Y), facing(south), inc(Y,I), cockroach(X,I), retract(cockroach(X,I))) ;
