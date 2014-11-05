@@ -77,16 +77,34 @@ namespace Assemble
         { 
             var agent = new AgentController(this);
             var actions = agent.Walk();
-            cost = new List<int>();
 
-            foreach(var action in actions){
-                cost.Add(getActionCost(action));
-            }
+            cost = actions.Select(GetActionCost).ToList();
 
-            return actions;
+            return GetActionsInDirections(actions);
         }
 
-        public int getActionCost(string action)
+        private static IList<string> GetActionsInDirections(IEnumerable<string> actions)
+        {
+            var directions = new List<string>();
+
+            foreach (var action in actions)
+            {
+                switch (action)
+                {
+                    case "moveUp": directions.Add("n"); break;
+                    case "moveDown": directions.Add("s"); break;
+                    case "moveLeft": directions.Add("w"); break;
+                    case "moveRight": directions.Add("e"); break;
+                    
+                    default: directions.Add("stop");
+                        break;
+                }
+            }
+
+            return directions;
+        }
+
+        public int GetActionCost(string action)
         {
             return (int)((MoveCosts)System.Enum.Parse(typeof(MoveCosts), action, true));
         }
