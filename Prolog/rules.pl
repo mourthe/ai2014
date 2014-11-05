@@ -193,8 +193,8 @@ updBreeze(X,Y) :- assert(breeze(X,Y)), tryHole(X,Y).
 % Facts
 %-----------------------------------
 
-at(19,23).
-visited(19,23).
+at(18,22).
+visited(18,22).
 facing(east).
 safeLst([]).
 
