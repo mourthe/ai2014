@@ -29,15 +29,15 @@ namespace Assemble.Controller
                         var action = new Helper.Action(Prolog.BestMove());
                         if (_bugsFixed == 10)
                         {
-                            RemoveVortex();
+                            _map.RemoveVortex();
                         }
                         if (_bugsFixed == 14)
                         {
-                            RemoveCocks();
+                            _map.RemoveCocks();
                         }
                         if (_bugsFixed == 18)
                         {
-                            RemoveHoles();
+                            _map.RemoveHoles();
                         }
 
                         switch (action.move)
@@ -108,39 +108,6 @@ namespace Assemble.Controller
             unsafe
             {
                 Prolog.UpdPerc(from.J, from.I, hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
-            }
-        }
-
-        private void RemoveVortex()
-        {
-            for (var i = 0; i < _map.Points.Length; i++)
-            {
-                for (var j = 0; j < _map.Points.Length; j++)
-                {
-                    _map.Points[i, j].HasVortex = false;
-                }
-            }
-        }
-
-        private void RemoveCocks()
-        {
-            for (var i = 0; i < _map.Points.Length; i++)
-            {
-                for (var j = 0; j < _map.Points.Length; j++)
-                {
-                    _map.Points[i, j].HasCockroach = false;
-                }
-            }
-        }
-
-        private void RemoveHoles()
-        {
-            for (var i = 0; i < _map.Points.Length; i++)
-            {
-                for (var j = 0; j < _map.Points.Length; j++)
-                {
-                    _map.Points[i, j].HasHole = false;
-                }
             }
         }
     }

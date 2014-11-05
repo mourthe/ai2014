@@ -26,7 +26,15 @@ namespace Assemble
 
         public Map(IList<int> terrain, IList<int> elements, int size = 42) 
         {
-            unsafe { Prolog.Initilize(Helper.StrToSbt(@"C:\Projects\ai2014\Prolog\rules.pl")); }
+            try
+            {
+                unsafe { Prolog.Initilize(Helper.StrToSbt(@"C:\Projects\ai2014\Prolog\rules.pl")); }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             _size = size;
             this.Result = null;
             this.Points = new Point[_size, _size];
@@ -291,6 +299,39 @@ namespace Assemble
             }
 
             this.Result = result;
+        }
+        
+        public void RemoveVortex()
+        {
+            for (var i = 0; i < this.Points.Length; i++)
+            {
+                for (var j = 0; j < this.Points.Length; j++)
+                {
+                    this.Points[i, j].HasVortex = false;
+                }
+            }
+        }
+
+        public void RemoveCocks()
+        {
+            for (var i = 0; i < this.Points.Length; i++)
+            {
+                for (var j = 0; j < this.Points.Length; j++)
+                {
+                    this.Points[i, j].HasCockroach = false;
+                }
+            }
+        }
+
+        public void RemoveHoles()
+        {
+            for (var i = 0; i < this.Points.Length; i++)
+            {
+                for (var j = 0; j < this.Points.Length; j++)
+                {
+                    this.Points[i, j].HasHole = false;
+                }
+            }
         }
     }
 }
