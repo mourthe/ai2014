@@ -193,8 +193,8 @@ updBreeze(X,Y) :- assert(breeze(X,Y)), tryHole(X,Y).
 % Facts
 %-----------------------------------
 
-at(18,22).
-visited(18,22).
+at(22,18).
+visited(22,18).
 facing(east).
 safeLst([]).
 
@@ -209,12 +209,16 @@ safeLst([]).
 inc(A, W) :- W is A + 1.
 dec(B, K) :- K is B - 1.
 
-bestMove(attack(X,Y)) :- 	stinkCockroach(X,Y) , ((at(X,Y), facing(north), dec(Y,D), cockroach(X,D), retract(cockroach(X,D))) ;
-													(at(X,Y), facing(south), inc(Y,I), cockroach(X,I), retract(cockroach(X,I))) ;
-													(at(X,Y), facing(west), dec(X,D), cockroach(D,Y), retract(cockroach(D,Y))) ; 
-													(at(X,Y), facing(east), inc(X,I), cockroach(I,Y), retract(cockroach(I,Y)))).
+bestMove(attack(Y,I)) :- 	at(22,18), facing(east), inc(Y,I), stinkCockroach(X,Y).
+
+bestMove(attack(X,Y)) :- 	at(X,Y), stinkCockroach(X,Y) , ((facing(north), dec(Y,D), cockroach(X,D), retract(cockroach(X,D))) ;
+															(facing(south), inc(Y,I), cockroach(X,I), retract(cockroach(X,I))) ;
+															(facing(west), dec(X,D), cockroach(D,Y), retract(cockroach(D,Y))) ; 
+															(facing(east), inc(X,I), cockroach(I,Y), retract(cockroach(I,Y)))).
 
 bestMove(fixBug(X,Y)) :- at(X,Y) , bug(X,Y) , retract(bug(X,Y)).
+
+bestMove(getAmmo(X,Y)) :- at(X,Y), ammo(X,Y), retract(ammo(X,Y).
 
 bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D) , safe( D ,Y) , not(cockroach( D ,Y))  , not(visited(D,Y)) ,  allowed(D,Y) )
 											, assert(at(D,Y)) , retract(at(X,Y)) , assert(visited(D,Y))  ,removeSafe(D,Y) .
