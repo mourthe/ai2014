@@ -180,7 +180,7 @@ setSafe(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , safeLst(L) ,(
 
 updPerShine(X,Y) :-  not(ammo(X,Y)),  assert(ammo(X,Y)).
 updPerSpaceD(X,Y) :- assert(spaceDistortions(X,Y)) , tryVortex(X,Y) .
-updPerCockS(X,Y,COCKS) :- (COCKS == 1 , assert(stinkCockroach(X,Y)) , tryCockroach(X,Y)) ; (COCKS == 0 , setSafe(X,Y)) . 
+updPerCockS(X,Y,COCKS) :- (COCKS == 1 , assert(stinkCockroach(X,Y)) , tryCockroach(X,Y)) . 
 updPerBinaries(X,Y,P) :- not(bug(X,Y)) , assert(bug(X,Y)).
 updFacing(D) :- retract(facing(X)) , assert(facing(D)).
 updBreeze(X,Y) :- assert(breeze(X,Y)), tryHole(X,Y).
