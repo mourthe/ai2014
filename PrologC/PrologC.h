@@ -43,10 +43,9 @@ namespace PrologC {
 			}
 			
 			if(hasCockroach){
-				PlTermv av(3);
+				PlTermv av(2);
 				av[0] = x ;
 				av[1] = y ;
-				av[2] = hasCockroach ;
 				PlCall("updPerCockS", av);
 			}
 			

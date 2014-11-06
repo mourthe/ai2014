@@ -21,7 +21,7 @@ namespace Assemble.Controller
         {
             var actions = new List<string>();
             updatePerceptions(_map.Points[22,18]);
-            while (_bugsFixed < 20)
+            while (_bugsFixed < 1)
             {
                 unsafe {
                     try
@@ -53,10 +53,12 @@ namespace Assemble.Controller
                             case BestMove.Debug:
                                 break;
                             case BestMove.GetAmmo:
+                                _map.Points[action.point.I, action.point.J].HasAmmo = false;
                                 updatePerceptions(action.point);
                                 break;
                             case BestMove.FixBug:
                                 _bugsFixed++;
+                                _map.Points[action.point.I, action.point.J].HasBug = false;
                                 updatePerceptions(action.point);
                                 break;
                             default:
@@ -77,16 +79,32 @@ namespace Assemble.Controller
 
         private void updatePerceptions(Point from)
         {
-            Point up = _map.Points[from.J - 1, from.I];
-            Point down = _map.Points[from.J + 1, from.I];
-            Point left = _map.Points[from.J, from.I - 1];
-            Point right = _map.Points[from.J, from.I + 1];
+            Point up = null, down = null, left = null, right = null;
+
+            if (from.I > 0)
+            {
+                up = _map.Points[from.I - 1, from.J];
+            }
+
+            if (from.I + 1 < 42)
+            {
+               down = _map.Points[from.I + 1, from.J];
+            }
+
+            if (from.J > 0)
+            {
+                left = _map.Points[from.I, from.J - 1];
+            }
+
+            if (from.J + 1 < 42)
+            {
+                right = _map.Points[from.I, from.J + 1];
+            }
 
 
             bool hasShine = false, hasCockroach = false, hasBreeze = false, hasDistortions = false, hasBinaries = false;
-            
-            if ((up != null && up.HasAmmo) || (down != null && down.HasAmmo)
-                || (left != null && left.HasAmmo) || (right != null && right.HasAmmo))
+
+            if (from.HasAmmo)
                 hasShine = true;
 
             if ((up != null && up.HasCockroach) || (down != null && down.HasCockroach)
@@ -101,8 +119,7 @@ namespace Assemble.Controller
                 || (left != null && left.HasVortex) || (right != null && right.HasVortex))
                 hasDistortions = true;
 
-            if ((up != null && up.HasBug) || (down != null && down.HasBug)
-                || (left != null && left.HasBug) || (right != null && right.HasBug))
+            if (from.HasBug)
                 hasBinaries = true;
             
             unsafe
