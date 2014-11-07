@@ -20,13 +20,13 @@ namespace Assemble
         public static int GetCost(this Terrain terrain){
             switch (terrain){
                 case Terrain.Asphalt:
-                    return 1;
+                    return -1;
                 case Terrain.Earth:
-                    return 3;
+                    return -1;
                 case Terrain.Grass:
-                    return 5;
+                    return -1;
                 case Terrain.Stones:
-                    return 10;
+                    return -1;
                 case Terrain.Building:
                     return 1000000000;
                 default:

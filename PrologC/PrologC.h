@@ -277,7 +277,18 @@ namespace PrologC {
 			// Predicate cases.
 			switch (predicate[0])
 			{
-			case 'm': ret[retIdx] = Move ; break;
+			case 'm':
+			{
+				if (predicate[4] == 'L')
+					ret[retIdx] = MoveLeft;
+				if (predicate[4] == 'R')
+					ret[retIdx] = MoveRight;
+				if (predicate[4] == 'U')
+					ret[retIdx] = MoveUp;
+				if (predicate[4] == 'D')
+					ret[retIdx] = MoveDown;
+				break;
+			}
 			case 't' :
 				{
 					BestMove turn ;
@@ -316,7 +327,10 @@ namespace PrologC {
 	
     enum BestMove
     {
-        Move,
+		MoveUp,
+		MoveDown,
+		MoveRight,
+		MoveLeft,
         TurnRight,
         TurnLeft,
         AStar, 

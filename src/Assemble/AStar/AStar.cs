@@ -63,7 +63,7 @@ namespace Assemble.AStar
                 explored.Insert(0, father);
                 hasExplored[father.Pos.J, father.Pos.I] = true;
                 
-                foreach (var child in _graph.GetNeighbors(father.Pos))
+                foreach (var child in _graph.GetVisitedNeighborhood(father.Pos, finalPosition))
                 {
                     var accChild = 0;
                     accChild = father.AccCost + child.Terrain.GetCost();

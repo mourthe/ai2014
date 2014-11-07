@@ -11,16 +11,18 @@ namespace Assemble.Controller
     {
         private readonly Map _map;
         private int _bugsFixed = 0;
+        private Point _currentPoint;
 
         public AgentController(Map map)
         {
             _map = map;
+            _currentPoint = _map.Points[22, 18];
         }
 
         public IList<string> Walk()
         {
-            var actions = new List<string>();
-            updatePerceptions(_map.Points[22,18]);
+            IList<string> actions = new List<string>();
+            updatePerceptions(_currentPoint);
             while (_bugsFixed < 1)
             {
                 unsafe {
@@ -39,7 +41,9 @@ namespace Assemble.Controller
                         {
                             _map.RemoveHoles();
                         }
-
+                    
+                        this.UpdateCurrentPoint(action);
+                        
                         switch (action.move)
                         {
                             case BestMove.Attack:
@@ -47,8 +51,21 @@ namespace Assemble.Controller
                                 //ENVIAR INFO DE BARATA MORTA
                                 // ele pode atacar o lugar errado?
                                 break;
-                            case BestMove.Move:
+                            case BestMove.MoveUp:
                                 updatePerceptions(action.point);
+                                break;
+                            case BestMove.MoveDown:
+                                updatePerceptions(action.point);
+                                break;
+                            case BestMove.MoveRight:
+                                updatePerceptions(action.point);
+                                break;
+                            case BestMove.MoveLeft:
+                                updatePerceptions(action.point);
+                                break;
+                            case BestMove.AStar:
+                                var result = new AStar.AStar(_map).Star(_currentPoint, action.point);
+                                NickFromTo(result.BestPath, ref actions);
                                 break;
                             case BestMove.Debug:
                                 break;
@@ -75,6 +92,31 @@ namespace Assemble.Controller
             }
 
             return actions;
+        }
+
+        private void NickFromTo(IEnumerable<Point> bestPath, ref IList<string> action )
+        {
+            var currPos = _currentPoint;
+            foreach (var point in bestPath)
+            {
+                action.Add(GetStep(currPos, point).ToString());
+                currPos = point;
+            }
+        }
+
+        private static BestMove GetStep(Point currPos, Point dest)
+        {
+            if (dest.I > currPos.I)
+            {
+                return BestMove.MoveDown;
+            }
+
+            if (dest.I < currPos.I)
+            {
+                return BestMove.MoveUp;
+            }
+
+            return dest.J > currPos.J ? BestMove.MoveRight : BestMove.TurnLeft;
         }
 
         private void updatePerceptions(Point from)
@@ -125,6 +167,15 @@ namespace Assemble.Controller
             unsafe
             {
                 Prolog.UpdPerc(from.I, from.J, hasShine, hasCockroach, hasBreeze, hasDistortions, hasBinaries);
+            }
+        }
+
+        private void UpdateCurrentPoint(Helper.Action action)
+        {
+            if (action.move == BestMove.MoveUp || action.move == BestMove.MoveDown ||
+                action.move == BestMove.MoveLeft || action.move == BestMove.MoveRight)
+            {
+                _currentPoint = action.point;
             }
         }
     }

@@ -2,7 +2,10 @@
 {
     public enum BestMove
     {
-        Move,
+        MoveUp,
+        MoveDown,
+        MoveRight,
+        MoveLeft,
         TurnRight,
         TurnLeft,
         AStar, 
@@ -14,8 +17,11 @@
     };
 
     public enum MoveCosts
-    {        
-        Move = -1,
+    {
+        MoveUp = -1,
+        MoveDown = -1,
+        MoveRight = -1,
+        MoveLeft = -1,
         TurnRight = -1,
         TurnLeft = -1, 
         Ammo = 10,
