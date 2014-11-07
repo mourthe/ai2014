@@ -47,7 +47,16 @@ namespace Assemble.Controller
                                 //ENVIAR INFO DE BARATA MORTA
                                 // ele pode atacar o lugar errado?
                                 break;
-                            case BestMove.Move:
+                            case BestMove.MoveRight:
+                                updatePerceptions(action.point);
+                                break;
+                            case BestMove.MoveLeft:
+                                updatePerceptions(action.point);
+                                break;
+                            case BestMove.MoveUp:
+                                updatePerceptions(action.point);
+                                break;
+                            case BestMove.MoveDown:
                                 updatePerceptions(action.point);
                                 break;
                             case BestMove.Debug:

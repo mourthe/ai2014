@@ -74,7 +74,10 @@ namespace Assemble.Controller
                     var move = (BestMove)actionParams[0];
                     switch (move)
                     {
-                        case BestMove.Move:
+                        case BestMove.MoveRight:
+                        case BestMove.MoveLeft:
+                        case BestMove.MoveUp:
+                        case BestMove.MoveDown:
                         case BestMove.AStar:
                         case BestMove.Debug:
                         case BestMove.GetAmmo:

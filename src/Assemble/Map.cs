@@ -99,10 +99,10 @@ namespace Assemble
             {
                 switch (action)
                 {
-                    case "moveUp": directions.Add("n"); break;
-                    case "moveDown": directions.Add("s"); break;
-                    case "moveLeft": directions.Add("w"); break;
-                    case "moveRight": directions.Add("e"); break;
+                    case "MoveUp": directions.Add("n"); break;
+                    case "MoveDown": directions.Add("s"); break;
+                    case "MoveLeft": directions.Add("w"); break;
+                    case "MoveRight": directions.Add("e"); break;
                     
                     default: directions.Add("stop");
                         break;
