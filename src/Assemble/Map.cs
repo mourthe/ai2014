@@ -99,10 +99,10 @@ namespace Assemble
             {
                 switch (action)
                 {
-                    case "moveUp": directions.Add("n"); break;
-                    case "moveDown": directions.Add("s"); break;
-                    case "moveLeft": directions.Add("w"); break;
-                    case "moveRight": directions.Add("e"); break;
+                    case "MoveUp": directions.Add("n"); break;
+                    case "MoveDown": directions.Add("s"); break;
+                    case "MoveLeft": directions.Add("w"); break;
+                    case "MoveRight": directions.Add("e"); break;
                     
                     default: directions.Add("stop");
                         break;
@@ -123,7 +123,7 @@ namespace Assemble
                 for (var j = 0; j < _size; x++, j++)
                 {
                     this.Points[i, j] = new Point(i, j, content.ElementAt(x));
-                    Helper.PutTerrain(j, i, terrain.ElementAt(x));
+                    Helper.PutTerrain(i, j, terrain.ElementAt(x));
                 } 
             }
         }
