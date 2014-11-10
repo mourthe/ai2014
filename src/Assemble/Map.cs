@@ -123,7 +123,7 @@ namespace Assemble
                 for (var j = 0; j < _size; x++, j++)
                 {
                     this.Points[i, j] = new Point(i, j, content.ElementAt(x));
-                    Helper.PutTerrain(j, i, terrain.ElementAt(x));
+                    Helper.PutTerrain(i, j, terrain.ElementAt(x));
                 } 
             }
         }
