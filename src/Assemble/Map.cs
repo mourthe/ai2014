@@ -128,6 +128,7 @@ namespace Assemble
             }
         }
 
+        
         public IList<string> GetBestPath(out double cost, out IList<string> party)
         {
             if (this.Result == null)
@@ -300,7 +301,45 @@ namespace Assemble
 
             this.Result = result;
         }
-        
+
+        public IEnumerable<Point> GetVisitedNeighborhood(Point point, Point final)
+        {
+            var retInxs = new List<Point>();
+
+            if ((new Point(point.I + 1, point.J)).Equals(final) || Prolog.IsVisited(point.I + 1, point.J))
+                retInxs.Add(new Point(point.I + 1, point.J)); 
+
+            if ((new Point(point.I - 1, point.J)).Equals(final) || Prolog.IsVisited(point.I - 1, point.J))
+                retInxs.Add(new Point(point.I - 1, point.J));
+
+            if ((new Point(point.I, point.J + 1)).Equals(final) || Prolog.IsVisited(point.I, point.J + 1))
+                retInxs.Add(new Point(point.I, point.J + 1)); 
+
+            if ((new Point(point.I, point.J - 1)).Equals(final) || Prolog.IsVisited(point.I, point.J - 1))
+                retInxs.Add(new Point(point.I, point.J - 1));
+
+            return retInxs;
+        }
+
+        public IEnumerable<Point> GetSafeNeighborhood(Point point)
+        {
+            var retInxs = new List<Point>();
+            
+            if (point.I + 1 < 42 && Prolog.IsSafe(point.I + 1, point.J))
+                retInxs.Add(new Point(point.I + 1, point.J)); 
+
+            if (point.I - 1 >= 0 && Prolog.IsSafe(point.I - 1, point.J))
+                retInxs.Add(new Point(point.I - 1, point.J)); 
+
+            if (point.J + 1 < 42 && Prolog.IsSafe(point.I, point.J + 1))
+                retInxs.Add(new Point(point.I, point.J + 1)); 
+
+            if (point.J - 1 >= 0 && Prolog.IsSafe(point.I, point.J - 1))
+                retInxs.Add(new Point(point.I, point.J - 1));
+
+            return retInxs;
+        }
+
         public void RemoveVortex()
         {
             for (var i = 0; i < this.Points.Length; i++)
