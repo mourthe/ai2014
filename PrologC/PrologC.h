@@ -293,7 +293,8 @@ namespace PrologC {
 					ret[retIdx] = turn ;   
 					break;
 				}
-			case 'f' : ret[retIdx] = FixBug ;   break; 
+			case 'f' : ret[retIdx] = FixBug ;   break;
+			case 'g': ret[retIdx] = GetAmmo; break;
 			case 'a' : ret[retIdx] = Attack ;   break; 
 			case 'd' : ret[retIdx] = Debug ; break;
 			default:
