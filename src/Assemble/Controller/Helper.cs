@@ -82,7 +82,6 @@ namespace Assemble.Controller
                         case BestMove.Debug:
                         case BestMove.GetAmmo:
                         case BestMove.FixBug:
-                            //Trocando x por y por que usamos i e j
                             destPoint = map.Points[actionParams[1], actionParams[2]];
                             break;
                         case BestMove.Attack:
