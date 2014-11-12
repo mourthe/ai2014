@@ -24,7 +24,7 @@
         MoveLeft = -1,
         TurnRight = -1,
         TurnLeft = -1, 
-        Ammo = 10,
+        GetAmmo = 10,
         Attack = -10,
         Cockroach = -10000,
         FixBug = 100,

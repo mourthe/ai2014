@@ -214,10 +214,10 @@ dec(B, K) :- K is B - 1.
 bestMove(fixBug(X,Y)) :- at(X,Y) , bug(X,Y) , retract(bug(X,Y)).
 bestMove(getAmmo(X,Y)) :- at(X,Y) , ammo(X,Y) , retract(ammo(X,Y)).
 
-bestMove(attack(D,Y)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(north), dec(X,D),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(D,Y)),  assert(attacked(D,Y)).
-bestMove(attack(I,Y)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(south), inc(X,I),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(I,Y)),  assert(attacked(I,Y)).
-bestMove(attack(X,IY)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(east), inc(Y,IY),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(X,IY)), assert(attacked(X,IY)).
-bestMove(attack(X,DY)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(west), dec(Y,DY),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(X,DY)), assert(attacked(X,DY)).
+bestMove(attack(D,Y)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(north), dec(X,D),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(D,Y)),  allowed(D,Y), assert(attacked(D,Y)).
+bestMove(attack(I,Y)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(south), inc(X,I),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(I,Y)),  allowed(I,DY), assert(attacked(I,Y)).
+bestMove(attack(X,IY)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(east), inc(Y,IY),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(X,IY)), allowed(X,IY), assert(attacked(X,IY)).
+bestMove(attack(X,DY)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(west), dec(Y,DY),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(X,DY)), allowed(X,DY), assert(attacked(X,DY)).
 
 %bestMove(attack(X,Y)) :- at(X,Y), cockroach(X,Y) ,  retract(cockroach(X,Y)).
 
