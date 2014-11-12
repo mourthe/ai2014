@@ -27,6 +27,7 @@
         GetAmmo = 10,
         Attack = -10,
         Cockroach = -10000,
+        Hole = -10000,
         FixBug = 100,
         Debug = 0
     };

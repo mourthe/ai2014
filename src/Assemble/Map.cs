@@ -353,9 +353,9 @@ namespace Assemble
 
         public void RemoveCocks()
         {
-            for (var i = 0; i < this.Points.Length; i++)
+            for (var i = 0; i < _size; i++)
             {
-                for (var j = 0; j < this.Points.Length; j++)
+                for (var j = 0; j < _size; j++)
                 {
                     this.Points[i, j].HasCockroach = false;
                 }
@@ -364,9 +364,9 @@ namespace Assemble
 
         public void RemoveHoles()
         {
-            for (var i = 0; i < this.Points.Length; i++)
+            for (var i = 0; i < _size; i++)
             {
-                for (var j = 0; j < this.Points.Length; j++)
+                for (var j = 0; j < _size; j++)
                 {
                     this.Points[i, j].HasHole = false;
                 }
