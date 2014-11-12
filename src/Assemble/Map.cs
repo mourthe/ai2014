@@ -103,7 +103,7 @@ namespace Assemble
                     case "MoveDown": directions.Add("s"); break;
                     case "MoveLeft": directions.Add("w"); break;
                     case "MoveRight": directions.Add("e"); break;
-                    case "Attack": directions.Add("a"); break;
+                    case "Attack": directions.Add("attack"); break;
                     
                     default: directions.Add("stop");
                         break;
