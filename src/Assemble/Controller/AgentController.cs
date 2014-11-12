@@ -29,7 +29,7 @@ namespace Assemble.Controller
                     try
                     {
                         var action = new Helper.Action(Prolog.BestMove(), this._map);
-                        /*if (_bugsFixed == 10)
+                        if (_bugsFixed == 10)
                         {
                             _map.RemoveVortex();
                         }
@@ -40,9 +40,9 @@ namespace Assemble.Controller
                         if (_bugsFixed == 18)
                         {
                             _map.RemoveHoles();
-                        }*/
+                        }
                     
-                        this.UpdateCurrentPoint(action);
+                            this.UpdateCurrentPoint(action);
                         
                         switch (action.move)
                         {
@@ -80,15 +80,16 @@ namespace Assemble.Controller
                                 break;
                         }
 
+                        actions.Add(action.move.ToString());
+
                         // verifica se caiu em buraco
-                        if (_map.Points[action.point.I, action.point.J].HasHole)
+                        if ((action.move == BestMove.MoveUp || action.move == BestMove.MoveDown ||
+                                action.move == BestMove.MoveLeft || action.move == BestMove.MoveRight)      
+                                    && _map.Points[action.point.I, action.point.J].HasHole)
                         {
-                            actions.Add(action.move.ToString());
                             actions.Add("Hole");
                             return actions;
                         }
-
-                        actions.Add(action.move.ToString());
                     }
                     catch (Exception e)
                     {
