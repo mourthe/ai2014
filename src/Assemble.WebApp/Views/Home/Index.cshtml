@@ -210,7 +210,6 @@
 	                   dataType: "json"
 	               }).done(function (data) {
 	                   var i = 1;
-	                   var acc = 0;
 	                   data.actions.forEach(function (action) {
 	                       window.Player.timeout(function () {
 	                           this.stop().animate("walk_up", 10, -1);
@@ -230,15 +229,16 @@
 	                               window.Player.animate("walk_right", 10, 10); window.Player.move("w", 20);
 	                           }
 	                           if (action.step == 'stop') {
-	                               acc = 5000;
 	                           }
 	                           if (action.step == 'attack') {
-	                               $.playSound('Content/shot');
-
-	                               window.cockroaches[j].elem.destroy();
-	                               acc = 500000;
+	                               $.playSound('Content/shot');	 
+	                               window.cockroaches.forEach(function (cock) {
+	                                   if (cock.position.j == action.elemsToDestroy.j && cock.position.i == action.elemsToDestroy.i) {
+	                                       cock.elem.destroy();
+	                                   }
+	                               });
 	                           }
-	                       }, (300 * i) + acc);
+	                       }, 150 * i);
 	                       acc = 0;
 	                       i++;
 	                   });

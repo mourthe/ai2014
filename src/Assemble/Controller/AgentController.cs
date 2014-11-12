@@ -49,6 +49,7 @@ namespace Assemble.Controller
                     
                         this.UpdateCurrentPoint(step);
                         action.Step = step.move.ToString();
+                        steps.Add(step.move.ToString());
                         switch (step.move)
                         {
                             case BestMove.Attack:
