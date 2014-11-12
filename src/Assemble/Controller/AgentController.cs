@@ -23,13 +23,13 @@ namespace Assemble.Controller
         {
             IList<string> actions = new List<string>();
             updatePerceptions(_currentPoint);
-            while (_bugsFixed < 1)
+            while (_bugsFixed < 2)
             {
                 unsafe {
                     try
                     {
                         var action = new Helper.Action(Prolog.BestMove(), this._map);
-                        if (_bugsFixed == 10)
+                        /*if (_bugsFixed == 10)
                         {
                             _map.RemoveVortex();
                         }
@@ -40,7 +40,7 @@ namespace Assemble.Controller
                         if (_bugsFixed == 18)
                         {
                             _map.RemoveHoles();
-                        }
+                        }*/
                     
                         this.UpdateCurrentPoint(action);
                         
@@ -48,8 +48,6 @@ namespace Assemble.Controller
                         {
                             case BestMove.Attack:
                                 _map.Points[action.point.I, action.point.J].HasCockroach = false;
-                                //ENVIAR INFO DE BARATA MORTA
-                                // ele pode atacar o lugar errado?
                                 break;
                             case BestMove.MoveUp:
                                 updatePerceptions(action.point);
@@ -80,6 +78,14 @@ namespace Assemble.Controller
                                 break;
                             default:
                                 break;
+                        }
+
+                        // verifica se caiu em buraco
+                        if (_map.Points[action.point.I, action.point.J].HasHole)
+                        {
+                            actions.Add(action.move.ToString());
+                            actions.Add("Hole");
+                            return actions;
                         }
 
                         actions.Add(action.move.ToString());
@@ -122,28 +128,33 @@ namespace Assemble.Controller
         private void updatePerceptions(Point from)
         {
             Point up = null, down = null, left = null, right = null;
-
-            // pega os vizinhos do ponto from
-            if (from.I > 0)
+            try
             {
-                up = _map.Points[from.I - 1, from.J];
-            }
+                // pega os vizinhos do ponto from
+                if (from.I > 0)
+                {
+                    up = _map.Points[from.I - 1, from.J];
+                }
 
-            if (from.I + 1 < 42)
+                if (from.I + 1 < 42)
+                {
+                    down = _map.Points[from.I + 1, from.J];
+                }
+
+                if (from.J > 0)
+                {
+                    left = _map.Points[from.I, from.J - 1];
+                }
+
+                if (from.J + 1 < 42)
+                {
+                    right = _map.Points[from.I, from.J + 1];
+                }
+            }
+            catch (Exception e)
             {
-               down = _map.Points[from.I + 1, from.J];
+                throw e;
             }
-
-            if (from.J > 0)
-            {
-                left = _map.Points[from.I, from.J - 1];
-            }
-
-            if (from.J + 1 < 42)
-            {
-                right = _map.Points[from.I, from.J + 1];
-            }
-
 
             bool hasShine = false, hasCockroach = false, hasBreeze = false, hasDistortions = false, hasBinaries = false;
 
@@ -177,6 +188,11 @@ namespace Assemble.Controller
                 action.move == BestMove.MoveLeft || action.move == BestMove.MoveRight)
             {
                 _currentPoint = action.point;
+
+                if (_currentPoint.I > 41 || _currentPoint.I < 0 || _currentPoint.J > 41 || _currentPoint.J < 0)
+                {
+                    throw new Exception("merda");
+                }
             }
         }
     }
