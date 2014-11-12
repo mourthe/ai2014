@@ -19,70 +19,88 @@ namespace Assemble.Controller
             _currentPoint = _map.Points[22, 18];
         }
 
-        public IList<string> Walk()
+        public IList<Action> Walk()
         {
-            IList<string> actions = new List<string>();
+            var actions = new List<Action>();
+            IList<string> steps = new List<string>();
             updatePerceptions(_currentPoint);
             while (_bugsFixed < 3)
             {
+                var action = new Action();
                 unsafe {
                     try
                     {
-                        var action = new Helper.Action(Prolog.BestMove(), this._map);
+                        var step = new Helper.Action(Prolog.BestMove(), this._map);
                         if (_bugsFixed == 10)
                         {
                             _map.RemoveVortex();
+                            action.KindToDestroy = "vortex";
                         }
                         if (_bugsFixed == 14)
                         {
                             _map.RemoveCocks();
+                            action.KindToDestroy = "cockroach";
                         }
                         if (_bugsFixed == 18)
                         {
                             _map.RemoveHoles();
+                            action.KindToDestroy = "hole";
                         }
                     
-                        this.UpdateCurrentPoint(action);
-                        
-                        switch (action.move)
+                        this.UpdateCurrentPoint(step);
+                        action.Step = step.move.ToString();
+                        switch (step.move)
                         {
                             case BestMove.Attack:
-                                _map.Points[action.point.I, action.point.J].HasCockroach = false;
-                                //ENVIAR INFO DE BARATA MORTA
-                                // ele pode atacar o lugar errado?
+                                _map.Points[step.point.I, step.point.J].HasCockroach = false;
+                                action.ElemToDestroy = step.point;
                                 break;
                             case BestMove.MoveUp:
-                                updatePerceptions(action.point);
+                                updatePerceptions(step.point);
                                 break;
                             case BestMove.MoveDown:
-                                updatePerceptions(action.point);
+                                updatePerceptions(step.point);
                                 break;
                             case BestMove.MoveRight:
-                                updatePerceptions(action.point);
+                                updatePerceptions(step.point);
                                 break;
                             case BestMove.MoveLeft:
-                                updatePerceptions(action.point);
+                                updatePerceptions(step.point);
                                 break;
                             case BestMove.AStar:
-                                var result = new AStar.AStar(_map).Star(_currentPoint, action.point);
+                                var result = new AStar.AStar(_map).Star(_currentPoint, step.point);
                                 NickFromTo(result.BestPath, ref actions);
                                 break;
                             case BestMove.Debug:
                                 break;
                             case BestMove.GetAmmo:
-                                _map.Points[action.point.I, action.point.J].HasAmmo = false;
-                                updatePerceptions(action.point);
+                                _map.Points[step.point.I, step.point.J].HasAmmo = false;
+                                updatePerceptions(step.point);
+                                action.ElemToDestroy = step.point;
                                 break;
                             case BestMove.FixBug:
                                 _bugsFixed++;
-                                _map.Points[action.point.I, action.point.J].HasBug = false;
-                                updatePerceptions(action.point);
+                                _map.Points[step.point.I, step.point.J].HasBug = false;
+                                updatePerceptions(step.point);
+                                action.ElemToDestroy = step.point;
                                 break;
                             default:
                                 break;
                         }
 
-                        actions.Add(action.move.ToString());
+                        // verifica se caiu em buraco
+                        if (_map.Points[step.point.I, step.point.J].HasHole)
+                        {
+                            action = new Action();
+                            action.Step = step.move.ToString();
+                            actions.Add(action);
+                            action = new Action();
+                            action.Step = "Hole";
+                            actions.Add(action);
+                            return actions;
+                        }
+                        actions.Add(action);
+
                     }
                     catch (Exception e)
                     {
@@ -94,12 +112,14 @@ namespace Assemble.Controller
             return actions;
         }
 
-        private void NickFromTo(IEnumerable<Point> bestPath, ref IList<string> action )
+        private void NickFromTo(IEnumerable<Point> bestPath, ref List<Action> actions )
         {
             var currPos = _currentPoint;
             foreach (var point in bestPath)
             {
-                action.Add(GetStep(currPos, point).ToString());
+                var action = new Action();
+                action.Step = GetStep(currPos, point).ToString();
+                actions.Add(action);
                 currPos = point;
             }
         }
@@ -122,28 +142,33 @@ namespace Assemble.Controller
         private void updatePerceptions(Point from)
         {
             Point up = null, down = null, left = null, right = null;
-
-            // pega os vizinhos do ponto from
-            if (from.I > 0)
+            try
             {
-                up = _map.Points[from.I - 1, from.J];
-            }
+                // pega os vizinhos do ponto from
+                if (from.I > 0)
+                {
+                    up = _map.Points[from.I - 1, from.J];
+                }
 
-            if (from.I + 1 < 42)
+                if (from.I + 1 < 42)
+                {
+                    down = _map.Points[from.I + 1, from.J];
+                }
+
+                if (from.J > 0)
+                {
+                    left = _map.Points[from.I, from.J - 1];
+                }
+
+                if (from.J + 1 < 42)
+                {
+                    right = _map.Points[from.I, from.J + 1];
+                }
+            }
+            catch (Exception e)
             {
-               down = _map.Points[from.I + 1, from.J];
+                throw e;
             }
-
-            if (from.J > 0)
-            {
-                left = _map.Points[from.I, from.J - 1];
-            }
-
-            if (from.J + 1 < 42)
-            {
-                right = _map.Points[from.I, from.J + 1];
-            }
-
 
             bool hasShine = false, hasCockroach = false, hasBreeze = false, hasDistortions = false, hasBinaries = false;
 
@@ -177,6 +202,11 @@ namespace Assemble.Controller
                 action.move == BestMove.MoveLeft || action.move == BestMove.MoveRight)
             {
                 _currentPoint = action.point;
+
+                if (_currentPoint.I > 41 || _currentPoint.I < 0 || _currentPoint.J > 41 || _currentPoint.J < 0)
+                {
+                    throw new Exception("merda");
+                }
             }
         }
     }

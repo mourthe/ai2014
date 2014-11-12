@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action.cs" />
     <Compile Include="AssembleService.cs" />
     <Compile Include="AStar\AStar.cs" />
     <Compile Include="AStar\SearchResult.cs" />

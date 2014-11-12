@@ -17,10 +17,7 @@ namespace Assemble.WebApi
         public GetPathResponse Post(GetPathRequest request)
         {
             var response = new GetPathResponse();
-            List<int> cost;
-            IList<string> party;
-            response.Steps = AssembleService.GetBestPath(request.Terrain, request.Elements, out cost);
-            response.Cost = cost;
+            response.Actions = AssembleService.GetBestPath(request.Terrain, request.Elements);
 
             return response;
         }

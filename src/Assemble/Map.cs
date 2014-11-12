@@ -81,36 +81,32 @@ namespace Assemble
             return characters;
         }
 
-        public IList<string> FixBugs(out List<int> cost)
-        { 
+        public IList<Action> FixBugs()
+        {
+
             var agent = new AgentController(this);
             var actions = agent.Walk();
 
-            cost = actions.Select(GetActionCost).ToList();
-
-            return GetActionsInDirections(actions);
-        }
-
-        private static IList<string> GetActionsInDirections(IEnumerable<string> actions)
-        {
-            var directions = new List<string>();
-
             foreach (var action in actions)
             {
-                switch (action)
-                {
-                    case "MoveUp": directions.Add("n"); break;
-                    case "MoveDown": directions.Add("s"); break;
-                    case "MoveLeft": directions.Add("w"); break;
-                    case "MoveRight": directions.Add("e"); break;
-                    case "Attack": directions.Add("attack"); break;
-                    
-                    default: directions.Add("stop");
-                        break;
-                }
+                action.Cost = GetActionCost(action.Step);
+                action.Step = GetActionsInDirections(action.Step);
             }
 
-            return directions;
+            return actions;
+        }
+
+        private static string GetActionsInDirections(string action)
+        {
+            switch (action)
+            {
+                case "MoveUp": return "n"; 
+                case "MoveDown": return "s";
+                case "MoveLeft": return "w";
+                case "MoveRight": return "e"; 
+                case "Attack": return "attack";                   
+                default: return "stop";
+            }
         }
 
         public int GetActionCost(string action)
@@ -354,9 +350,9 @@ namespace Assemble
 
         public void RemoveCocks()
         {
-            for (var i = 0; i < this.Points.Length; i++)
+            for (var i = 0; i < _size; i++)
             {
-                for (var j = 0; j < this.Points.Length; j++)
+                for (var j = 0; j < _size; j++)
                 {
                     this.Points[i, j].HasCockroach = false;
                 }
@@ -365,9 +361,9 @@ namespace Assemble
 
         public void RemoveHoles()
         {
-            for (var i = 0; i < this.Points.Length; i++)
+            for (var i = 0; i < _size; i++)
             {
-                for (var j = 0; j < this.Points.Length; j++)
+                for (var j = 0; j < _size; j++)
                 {
                     this.Points[i, j].HasHole = false;
                 }

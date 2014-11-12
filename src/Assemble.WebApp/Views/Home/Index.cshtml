@@ -124,7 +124,7 @@
 	            window.elemCodes = Array.apply(null, new Array(1764)).map(Number.prototype.valueOf, 0);
 	            window.lokis = getElements(20);
 	            window.lokis.forEach(function (character) {
-	                Crafty.e("2D, DOM, Loki")
+	                character.elem = Crafty.e("2D, DOM, Loki")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
 	                idx = character.position.j + (42 * character.position.i);
 	                window.elemCodes[idx] = 2;
@@ -133,15 +133,15 @@
 
 	            window.cockroaches = getElements(100);
 	            window.cockroaches.forEach(function (character) {
-	                Crafty.e("2D, DOM, Cockroach")
+	                character.elem = Crafty.e("2D, DOM, Cockroach")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
-	                idx = character.position.j + (42 * character.position.i);
+	                idx = character.position.j + (42 * character.position.i);                   
 	                window.elemCodes[idx] = 3;
 	            });
 
 	            window.bullets = getElements(30);
 	            window.bullets.forEach(function (character) {
-	                Crafty.e("2D, DOM, Bullet")
+	                character.elem = Crafty.e("2D, DOM, Bullet")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
 	                idx = character.position.j + (42 * character.position.i);
 	                window.elemCodes[idx] = 1;
@@ -149,7 +149,7 @@
 
 	            window.hole = getElements(50);
 	            window.hole.forEach(function (character) {
-	                Crafty.e("2D, DOM, Hole")
+	                character.elem = Crafty.e("2D, DOM, Hole")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
 	                idx = character.position.j + (42 * character.position.i);
 	                window.elemCodes[idx] = 4;
@@ -157,7 +157,7 @@
 
 	            window.vortex = getElements(20);
 	            window.vortex.forEach(function (character) {
-	                Crafty.e("2D, DOM, Vortex")
+	                character.elem = Crafty.e("2D, DOM, Vortex")
                         .attr({ x: character.position.j * 20, y: character.position.i * 20, z: 10, isWater: false });
 	                idx = character.position.j + (42 * character.position.i);
 	                window.elemCodes[idx] = 5;
@@ -211,29 +211,31 @@
 	               }).done(function (data) {
 	                   var i = 1;
 	                   var acc = 0;
-	                   data.steps.forEach(function (movement) {
+	                   data.actions.forEach(function (action) {
 	                       window.Player.timeout(function () {
 	                           this.stop().animate("walk_up", 10, -1);
 	                           this.stop().animate("walk_down", 10, -1);
 	                           this.stop().animate("walk_left", 10, -1);
 	                           this.stop().animate("walk_right", 10, -1);
-	                           if (movement == 'n') {
+	                           if (action.step == 'n') {
 	                               window.Player.animate("walk_up", 10, 10); window.Player.move("n", 20);
 	                           }
-	                           if (movement == 's') {
+	                           if (action.step == 's') {
 	                               window.Player.animate("walk_down", 10, 10); window.Player.move("s", 20);
 	                           }
-	                           if (movement == 'e') {
+	                           if (action.step == 'e') {
 	                               window.Player.animate("walk_left", 10, 10); window.Player.move("e", 20);
 	                           }
-	                           if (movement == 'w') {
+	                           if (action.step == 'w') {
 	                               window.Player.animate("walk_right", 10, 10); window.Player.move("w", 20);
 	                           }
-	                           if (movement == 'stop') {
+	                           if (action.step == 'stop') {
 	                               acc = 5000;
 	                           }
-	                           if (movement == 'attack') {
+	                           if (action.step == 'attack') {
 	                               $.playSound('Content/shot');
+
+	                               window.cockroaches[j].elem.destroy();
 	                               acc = 500000;
 	                           }
 	                       }, (300 * i) + acc);
