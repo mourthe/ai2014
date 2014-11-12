@@ -104,7 +104,8 @@ namespace Assemble
                 case "MoveDown": return "s";
                 case "MoveLeft": return "w";
                 case "MoveRight": return "e"; 
-                case "Attack": return "attack";                   
+                case "Attack": return "attack";
+                case "FixBug": return "fix";
                 default: return "stop";
             }
         }

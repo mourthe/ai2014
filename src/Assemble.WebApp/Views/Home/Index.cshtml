@@ -41,7 +41,7 @@
                              "Images/cockroach.png",
 	            ], function () {
 
-	                Crafty.sprite(50, 67, "Images/ogre.png", {
+	                Crafty.sprite(20, 26, "Images/ogre.png", {
 	                    Ogre: [0, 0]
 	                });
 
@@ -166,7 +166,7 @@
 
 	            //Player
 	            window.Player = Crafty.e("2D, DOM, Fourway, SpriteAnimation, Sprite, Ogre, Collision")
-                     .attr({ x: 19 * 18, y: 23 * 18, z: 10, isWater: false })
+                     .attr({ x: 18 * 20, y: 22 * 20, z: 10, isWater: false })
                      .animate("walk_left", 0, 1, 3)
                      .animate("walk_right", 0, 2, 3)
                      .animate("walk_up", 0, 3, 3)
@@ -238,16 +238,17 @@
 	                                   }
 	                               });
 	                           }
-	                       }, 150 * i);
+	                           if (action.step == 'fix') {
+	                               window.lokis.forEach(function (loki) {
+	                                   if (loki.position.j == action.elemsToDestroy.j && loki.position.i == action.elemsToDestroy.i) {
+	                                       loki.elem.destroy();
+	                                   }
+	                               });
+	                           }
+	                       }, 300 * i);
 	                       acc = 0;
 	                       i++;
 	                   });
-
-                       var pps = []
-	                   data.visited.forEach(function (pp) {
-	                      pps.push(pp + ", ");
-	                   });
-	                   $("#party-components").html(pps)
 	                   $("#cost-components").html(data.cost);
 
 	               });
