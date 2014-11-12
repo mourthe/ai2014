@@ -23,7 +23,7 @@ namespace Assemble.Controller
         {
             IList<string> actions = new List<string>();
             updatePerceptions(_currentPoint);
-            while (_bugsFixed < 1)
+            while (_bugsFixed < 3)
             {
                 unsafe {
                     try

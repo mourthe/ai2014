@@ -1,4 +1,4 @@
-﻿%-----------------------------------
+﻿﻿%-----------------------------------
 % Dynamic procedures
 %-----------------------------------
 
@@ -232,21 +232,23 @@ bestMove(moveRight(X,I)) :- (at(X,Y) , Y < 41 , facing(east) , inc(Y,I) , safe(X
 
 bestMove(moveLeft(X,D)) :- (at(X,Y) , Y > 0 ,  facing(west) , dec(Y,D) , safe(X,D), not(cockroach(X,D))  , not(visited(X,D)) , allowed(X,D) ) 
 											, assert(at(X,D)) , retract(at(X,Y)) , assert(visited(X,D)) ,removeSafe(X,D) .
+
+bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D)  , not(visited(D,Y)) ,  allowed(D,Y)  )  , assert(at(D,Y)) , retract(at(X,Y)) , assert(visited(D,Y)).
+bestMove(moveDown(I,Y)) :- (at(X,Y) , X < 41 , facing(south) , inc(X,I)  , not(visited(I,Y)) ,allowed(I,Y) ) ,  assert(at(I,Y)) , retract(at(X,Y)) , assert(visited(I,Y)).
+bestMove(moveRight(X,I)) :- (at(X,Y) , Y < 41  , facing(east) , inc(Y,I) , not(visited(X,I)) ,  allowed(X,I))  , assert(at(X,I)) , retract(at(X,Y)) , assert(visited(X,I)).
+bestMove(moveLeft(X,D)) :- (at(X,Y) , Y > 0 ,  facing(west) , dec(Y,D) , not(visited(X,D)) , allowed(X,D) ) , assert(at(X,D)) , retract(at(X,Y)) , assert(visited(X,D)).
+											
 										
-bestMove(turnRight) :- 	(facing(north) , at(X,Y) , dec(X,D) , inc(Y,I) , (not(safe(D,Y)) ; not(allowed(D,Y)) ; visited(D,Y) )  , safe(X,I) , allowed(X,I)  , not(visited(X,I)) ,  assert(facing(east)) , retract(facing(north)) );
-						(facing(south) , at(X,Y) , inc(X,I) , dec(Y,D) , (not(safe(I,Y)) ; not(allowed(I,Y)) ; visited(I,Y) )  , safe(X,D) , allowed(X,D)  , not(visited(X,D)) ,  assert(facing(west)) , retract(facing(south)) );
-						(facing(east) , at(X,Y) , inc(Y,I) , inc(X,IX) , (not(safe(X,I)) ; not(allowed(X,I)) ; visited(X,I) )  , safe(IX,Y) ,allowed(IX,Y) , not(visited(IX,Y)) ,  assert(facing(south)) , retract(facing(east)) );
-						(facing(west) , at(X,Y) , dec(Y,D) , dec(X,DX) , (not(safe(X,D)) ; not(allowed(X,D)) ; visited(X,D) )  , safe(DX,Y) ,allowed(DX,Y) , not(visited(DX,Y)) ,  assert(facing(north)) , retract(facing(west)) ).
+bestMove(turnRight) :- 	(facing(north) , at(X,Y) , dec(X,D) , inc(Y,I) , (not(safe(D,Y)) ; not(allowed(D,Y)) ; visited(D,Y) )  , allowed(X,I)  , not(visited(X,I)) ,  assert(facing(east)) , retract(facing(north)) );
+						(facing(south) , at(X,Y) , inc(X,I) , dec(Y,D) , (not(safe(I,Y)) ; not(allowed(I,Y)) ; visited(I,Y) )  , allowed(X,D)  , not(visited(X,D)) ,  assert(facing(west)) , retract(facing(south)) );
+						(facing(east) , at(X,Y) , inc(Y,I) , inc(X,IX) , (not(safe(X,I)) ; not(allowed(X,I)) ; visited(X,I) )   ,allowed(IX,Y) , not(visited(IX,Y)) ,  assert(facing(south)) , retract(facing(east)) );
+						(facing(west) , at(X,Y) , dec(Y,D) , dec(X,DX) , (not(safe(X,D)) ; not(allowed(X,D)) ; visited(X,D) )   ,allowed(DX,Y) , not(visited(DX,Y)) ,  assert(facing(north)) , retract(facing(west)) ).
 
 bestMove(turnLeft) :- 	(facing(north) , at(X,Y) , dec(X,D) , dec(Y,DY) , (not(safe(D,Y)) ; not(allowed(D,Y)) ; visited(D,Y) )  , safe(X,DY) ,allowed(X,DY), not(visited(X,DY)) ,  assert(facing(west)) , retract(facing(north)) );
 						(facing(south) , at(X,Y) , inc(X,I) , inc(Y,IY) , (not(safe(I,Y)) ; not(allowed(I,Y)) ; visited(I,Y) )  , safe(X,IY) ,allowed(X,IY), not(visited(X,IY)) ,  assert(facing(east)) , retract(facing(south)) );
 						(facing(east) ,  at(X,Y) , inc(Y,I) , dec(X,D)  , (not(safe(X,I)) ; not(allowed(X,I)) ; visited(X,I) )  , safe(D,Y)  ,allowed(D,Y) , not(visited(D,Y)) ,  assert(facing(north)) , retract(facing(east)) );
 						(facing(west) ,  at(X,Y) , dec(Y,D) , inc(X,I)  , (not(safe(X,D)) ; not(allowed(X,D)) ; visited(X,D) )  , safe(I,Y)  ,allowed(I,Y) , not(visited(I,Y)) ,  assert(facing(south)) , retract(facing(west)) ).				
 						
-bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D)  , not(visited(D,Y)) ,  allowed(D,Y)  )  , assert(at(D,Y)) , retract(at(X,Y)) , assert(visited(D,Y)).
-bestMove(moveDown(I,Y)) :- (at(X,Y) , X < 41 , facing(south) , inc(X,I)  , not(visited(I,Y)) ,allowed(I,Y) ) ,  assert(at(I,Y)) , retract(at(X,Y)) , assert(visited(I,Y)).
-bestMove(moveRight(X,I)) :- (at(X,Y) , Y < 41  , facing(east) , inc(Y,I) , not(visited(X,I)) ,  allowed(X,I))  , assert(at(X,I)) , retract(at(X,Y)) , assert(visited(X,I)).
-bestMove(moveLeft(X,D)) :- (at(X,Y) , Y > 0 ,  facing(west) , dec(Y,D) , not(visited(X,D)) , allowed(X,D) ) , assert(at(X,D)) , retract(at(X,Y)) , assert(visited(X,D)).
 
 bestMove(aStar(Xg,Yg)) :- safeLst(L) , not(isEmpty(L)) , isAllowed(H,L) , H = safe(Xg,Yg) , ( takeList(Xg,Yg,L,LR) ) , retract(at(X,Y)) , assert(at(Xg,Yg)) , assert(visited(Xg,Yg)) .
 
