@@ -21,6 +21,7 @@
       @Scripts.Render("~/Scripts/create_mocks_module.js")
       @Scripts.Render("~/Scripts/tiledmapbuilder.js")
       @Scripts.Render("~/Scripts/jquery-2.1.1.min.js")
+      @Scripts.Render("~/Scripts/jquery.playSound.js")
 	<script>
 	    window.onload = function () {
 	        var WIDTH = 840;
@@ -227,8 +228,14 @@
 	                           if (movement == 'w') {
 	                               window.Player.animate("walk_right", 10, 50); window.Player.move("w", 20);
 	                           }
+	                           if (movement == 'a') {
+	                               
+	                           }
 	                           if (movement == 'stop') {
 	                               window.Player.animate("walk_right", 10, 50);
+	                           }
+	                           if (movement == 'a') {
+	                               $.playSound('Content/shot.wav');
 	                           }
 	                       }, 300 * i);
 	                       i++;

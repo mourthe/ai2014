@@ -58,10 +58,11 @@ namespace PrologC {
 				PlCall("updPerSpaceD", av);
 			}
 
-			if (hasCockroach){
-				PlTermv av(2);
+			if (true){
+				PlTermv av(3);
 				av[0] = x;
 				av[1] = y;
+				av[2] = hasCockroach ? 1 : 0;
 				PlCall("updPerCockS", av);
 			}
 
@@ -292,7 +293,8 @@ namespace PrologC {
 					ret[retIdx] = turn ;   
 					break;
 				}
-			case 'f' : ret[retIdx] = FixBug ;   break; 
+			case 'f' : ret[retIdx] = FixBug ;   break;
+			case 'g': ret[retIdx] = GetAmmo; break;
 			case 'a' : ret[retIdx] = Attack ;   break; 
 			case 'd' : ret[retIdx] = Debug ; break;
 			default:

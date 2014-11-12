@@ -5,7 +5,6 @@
 :- dynamic vortex/2.
 :- dynamic ammo/2.
 :- dynamic hole/2.
-:- dynamic trainer/2.
 :- dynamic visited/2.
 :- dynamic bug/2.
 :- dynamic ammoShine/2.
@@ -21,7 +20,6 @@
 :- dynamic cockroach/2.
 :- dynamic terrainType/3.
 :- dynamic attacked/2.
-:- dynamic turnCount/1.
 
 
 %-----------------------------------
@@ -69,7 +67,6 @@ takeList(X,Y,L,L1) :- delList(safe(X,Y),L,L1) , retract(safeLst(L)) , assert(saf
 % se nick está em X,Y, então este local foi visitado
 visited(X,Y) :- at(X,Y) .
 
-% se o nick esta em X,Y e não tem uma barata ali, ali é seguro.
 safe(X,Y) :- safeLst(L) , isSafe(safe(X,Y),L) .
 
 putCockroach(X,Y) :- not(cockroach(X,Y)) , assert(cockroach(X,Y)) , safeLst(L) , takeList(X,Y,L,L1).
@@ -182,7 +179,7 @@ setSafe(X,Y) :-  inc(X,I) , inc(Y,Iy) , dec(X,D) , dec(Y,Dy) , safeLst(L) ,(
 
 updPerShine(X,Y) :-  not(ammo(X,Y)),  assert(ammo(X,Y)).
 updPerSpaceD(X,Y) :- assert(spaceDistortions(X,Y)) , tryVortex(X,Y) .
-updPerCockS(X,Y) :- (assert(stinkCockroach(X,Y)) , tryCockroach(X,Y)). 
+updPerCockS(X,Y,C) :- (C == 1, assert(stinkCockroach(X,Y)) , tryCockroach(X,Y)) ; (C == 0 , not(breeze(X,Y)), not(spaceDistortions(X,Y)), setSafe(X,Y)). 
 updPerBinaries(X,Y) :- not(bug(X,Y)) , assert(bug(X,Y)).
 updFacing(D) :- retract(facing(X)) , assert(facing(D)).
 updBreeze(X,Y) :- assert(breeze(X,Y)), tryHole(X,Y).
@@ -215,45 +212,27 @@ dec(B, K) :- K is B - 1.
 
 
 bestMove(fixBug(X,Y)) :- at(X,Y) , bug(X,Y) , retract(bug(X,Y)).
+bestMove(getAmmo(X,Y)) :- at(X,Y) , ammo(X,Y) , retract(ammo(X,Y)).
 
-bestMove(attack(D,Y)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(north), dec(X,D),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(D,Y)), setSafe(D,Y), assert(attacked(D,Y)).
-bestMove(attack(I,Y)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(south), inc(X,I),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(I,Y)),  setSafe(I,Y), assert(attacked(I,Y)).
-bestMove(attack(X,IY)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(east), inc(Y,IY),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(X,IY)), setSafe(X,IY), assert(attacked(X,IY)).
-bestMove(attack(X,DY)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(west), dec(Y,DY),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(X,DY)), setSafe(X,DY), assert(attacked(X,DY)).
+bestMove(attack(D,Y)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(north), dec(X,D),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(D,Y)),  assert(attacked(D,Y)).
+bestMove(attack(I,Y)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(south), inc(X,I),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(I,Y)),  assert(attacked(I,Y)).
+bestMove(attack(X,IY)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(east), inc(Y,IY),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(X,IY)), assert(attacked(X,IY)).
+bestMove(attack(X,DY)) :- 	stinkCockroach(X,Y) , at(X,Y), facing(west), dec(Y,DY),  not(breeze(X,Y)), not(spaceDistortions(X,Y)), not(attacked(X,DY)), assert(attacked(X,DY)).
 
-bestMove(attack(X,Y)) :- at(X,Y), cockroach(X,Y) ,  retract(cockroach(X,Y)).
-
-bestMove(fixBug(X,Y)) :- at(X,Y) , bug(X,Y) , retract(bug(X,Y)).
+%bestMove(attack(X,Y)) :- at(X,Y), cockroach(X,Y) ,  retract(cockroach(X,Y)).
 
 bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D) , safe( D ,Y) , not(cockroach( D ,Y))  , not(visited(D,Y)) ,  allowed(D,Y) )
 											, assert(at(D,Y)) , retract(at(X,Y)) , assert(visited(D,Y))  ,removeSafe(D,Y) .
 
-bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D), visited(D,Y), turnCount(2),  allowed(D,Y) )
-											, assert(at(D,Y)) , retract(at(X,Y)), assert(visited(D,Y)), assert(turnCount(0)), retract(turnCount(2)) .
-
 bestMove(moveDown(I,Y)) :- (at(X,Y) , X < 41 , facing(south) , inc(X,I) , safe(I ,Y) , not(cockroach(I ,Y)) , not(visited(I,Y)) ,allowed(I,Y) ) 
 											, assert(at(I,Y)) , retract(at(X,Y)) , assert(visited(I,Y)) ,removeSafe(I,Y) .
 		
-bestMove(moveDown(I,Y)) :- (at(X,Y) , X > 0 , facing(south) , inc(X,I), visited(I,Y), turnCount(2),  allowed(D,Y) )
-											, assert(at(I,Y)) , retract(at(I,Y)), assert(visited(I,Y)), assert(turnCount(0)), retract(turnCount(2)) .
-
-bestMove(moveRight(X,I)) :- (at(X,Y) , Y < 41 , facing(east) , inc(Y,I) , safe(X,I) , not(cockroach(X,I)) , not(visited(X,I)) ,  allowed(X,I) ) 
+bestMove(moveRight(X,I)) :- (at(X,Y) , Y < 41 , facing(east) , inc(Y,I) , safe(X,I), allowed(X,I), not(cockroach(X,I)) , not(visited(X,I))) 
 											, assert(at(X,I)) , retract(at(X,Y)) , assert(visited(X,I)) ,removeSafe(X,I)  .
-											
-bestMove(moveRight(X,I)) :- (at(X,Y) , X > 0 , facing(east) , inc(Y,I), visited(X,I), turnCount(2),  allowed(D,Y) )
-											, assert(at(X,I)) , retract(at(X,Y)), assert(visited(X,I)), assert(turnCount(0)), retract(turnCount(2)) .
 
 bestMove(moveLeft(X,D)) :- (at(X,Y) , Y > 0 ,  facing(west) , dec(Y,D) , safe(X,D), not(cockroach(X,D))  , not(visited(X,D)) , allowed(X,D) ) 
 											, assert(at(X,D)) , retract(at(X,Y)) , assert(visited(X,D)) ,removeSafe(X,D) .
-											
-bestMove(moveLeft(X,D)) :- (at(X,Y) , X > 0 , facing(west) , dec(Y,D), visited(X,D), turnCount(2),  allowed(D,Y) )
-											, assert(at(X,D)) , retract(at(X,Y)), assert(visited(X,D)), assert(turnCount(0)), retract(turnCount(2)) .
-
-bestMove(turnRight) :- at(X,Y), facing(north), (breeze(X,Y); spaceDistortions(X,Y)), turnCount(N), N < 2, retract(turnCount(N)), inc(N,NI), assert(turnCount(NI)), assert(facing(east)) , retract(facing(north)).
-bestMove(turnRight) :- at(X,Y), facing(south), (breeze(X,Y); spaceDistortions(X,Y)), turnCount(N), N < 2, retract(turnCount(N)), inc(N,NI), assert(turnCount(NI)), assert(facing(west)) , retract(facing(south)).
-bestMove(turnRight) :- at(X,Y),	facing(east), (breeze(X,Y); spaceDistortions(X,Y)), turnCount(N), N < 2, retract(turnCount(N)), inc(N,NI), assert(turnCount(NI)), assert(facing(south)) , retract(facing(east)).
-bestMove(turnRight) :- at(X,Y),	facing(west), (breeze(X,Y); spaceDistortions(X,Y)), turnCount(N), N < 2, retract(turnCount(N)), inc(N,NI), assert(turnCount(NI)), assert(facing(north)) , retract(facing(west)).	
-											
+										
 bestMove(turnRight) :- 	(facing(north) , at(X,Y) , dec(X,D) , inc(Y,I) , (not(safe(D,Y)) ; not(allowed(D,Y)) ; visited(D,Y) )  , safe(X,I) , allowed(X,I)  , not(visited(X,I)) ,  assert(facing(east)) , retract(facing(north)) );
 						(facing(south) , at(X,Y) , inc(X,I) , dec(Y,D) , (not(safe(I,Y)) ; not(allowed(I,Y)) ; visited(I,Y) )  , safe(X,D) , allowed(X,D)  , not(visited(X,D)) ,  assert(facing(west)) , retract(facing(south)) );
 						(facing(east) , at(X,Y) , inc(Y,I) , inc(X,IX) , (not(safe(X,I)) ; not(allowed(X,I)) ; visited(X,I) )  , safe(IX,Y) ,allowed(IX,Y) , not(visited(IX,Y)) ,  assert(facing(south)) , retract(facing(east)) );
@@ -271,8 +250,16 @@ bestMove(moveLeft(X,D)) :- (at(X,Y) , Y > 0 ,  facing(west) , dec(Y,D) , not(vis
 
 bestMove(aStar(Xg,Yg)) :- safeLst(L) , not(isEmpty(L)) , isAllowed(H,L) , H = safe(Xg,Yg) , ( takeList(Xg,Yg,L,LR) ) , retract(at(X,Y)) , assert(at(Xg,Yg)) , assert(visited(Xg,Yg)) .
 
-
 bestMove(debug(0,0)) .
+
+%bestMove(moveLeft(X,D)) :- (at(X,Y) , X > 0 , facing(west) , dec(Y,D), visited(X,D), turnCount(2)), assert(at(X,D)) , retract(at(X,Y)), assert(visited(X,D)), assert(turnCount(0)), retract(turnCount(2)) .
+%bestMove(turnRight) :- at(X,Y), facing(north), (breeze(X,Y); spaceDistortions(X,Y)), assert(facing(east)) , retract(facing(north)).
+%bestMove(turnRight) :- at(X,Y), facing(south), (breeze(X,Y); spaceDistortions(X,Y)), assert(facing(west)) , retract(facing(south)).
+%bestMove(turnRight) :- at(X,Y),	facing(east), (breeze(X,Y); spaceDistortions(X,Y)),  assert(facing(south)) , retract(facing(east)).
+%bestMove(turnRight) :- at(X,Y),	facing(west), (breeze(X,Y); spaceDistortions(X,Y)),  assert(facing(north)) , retract(facing(west)).	
+%bestMove(moveRight(X,I)) :- (at(X,Y) , X > 0 , facing(east) , inc(Y,I), visited(X,I), turnCount(2)), assert(at(X,I)) , retract(at(X,Y)), assert(visited(X,I)), assert(turnCount(0)), retract(turnCount(2)) .
+%bestMove(moveDown(I,Y)) :- (at(X,Y) , X > 0 , facing(south) , inc(X,I), visited(I,Y), turnCount(2))								, assert(at(I,Y)) , retract(at(I,Y)), assert(visited(I,Y)), assert(turnCount(0)), retract(turnCount(2)) .
+%bestMove(moveUp(D,Y)) :- (at(X,Y) , X > 0 , facing(north) , dec(X,D), visited(D,Y), turnCount(2)), assert(at(D,Y)) , retract(at(X,Y)), assert(visited(D,Y)), assert(turnCount(0)), retract(turnCount(2)) .
 
 %-----------------------------------
 % End of Best moves

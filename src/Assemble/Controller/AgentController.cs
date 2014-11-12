@@ -123,6 +123,7 @@ namespace Assemble.Controller
         {
             Point up = null, down = null, left = null, right = null;
 
+            // pega os vizinhos do ponto from
             if (from.I > 0)
             {
                 up = _map.Points[from.I - 1, from.J];
