@@ -26,7 +26,7 @@ namespace Assemble.Controller
             var actions = new List<Action>();
             IList<string> steps = new List<string>();
             updatePerceptions(_currentPoint);
-            while (_bugsFixed < 3)
+            while (_bugsFixed < 20)
             {
                 var action = new Action();
                 unsafe {
