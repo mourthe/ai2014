@@ -12,9 +12,11 @@ namespace Assemble.Controller
         private readonly Map _map;
         private int _bugsFixed = 0;
         private Point _currentPoint;
+        private Facing _facing;
 
         public AgentController(Map map)
         {
+            _facing = Facing.East;
             _map = map;
             _currentPoint = _map.Points[22, 18];
         }
@@ -53,8 +55,9 @@ namespace Assemble.Controller
                         switch (step.move)
                         {
                             case BestMove.Attack:
-                                _map.Points[step.point.I, step.point.J].HasCockroach = false;
-                                action.ElemToDestroy = step.point;
+                                var attackedPoint = GetAttackedPoint();
+                                _map.Points[attackedPoint.I, attackedPoint.J].HasCockroach = false;
+                                action.ElemToDestroy = attackedPoint;
                                 break;
                             case BestMove.MoveUp:
                                 updatePerceptions(step.point);
@@ -84,6 +87,10 @@ namespace Assemble.Controller
                                 _map.Points[step.point.I, step.point.J].HasBug = false;
                                 updatePerceptions(step.point);
                                 action.ElemToDestroy = step.point;
+                                break;
+                            case BestMove.TurnRight:
+                            case BestMove.TurnLeft:
+                                UpdateFacing(step.move);
                                 break;
                             default:
                                 break;
@@ -209,6 +216,44 @@ namespace Assemble.Controller
                     throw new Exception("merda");
                 }
             }
+        }
+
+        private Point GetAttackedPoint()
+        {
+            switch (_facing)
+            {
+                case Facing.East:
+                    return _map.Points[_currentPoint.I, _currentPoint.J + 1];
+                case Facing.West:
+                    return _map.Points[_currentPoint.I, _currentPoint.J - 1];
+                case Facing.North:
+                    return _map.Points[_currentPoint.I - 1, _currentPoint.J];
+                case Facing.South:
+                    return _map.Points[_currentPoint.I + 1, _currentPoint.J];
+                default:
+                    return null;
+            }
+        }
+
+        private void UpdateFacing(BestMove turn)
+        {
+            if (turn == BestMove.TurnLeft && _facing == Facing.East)
+                _facing = Facing.North;
+            if (turn == BestMove.TurnLeft && _facing == Facing.West)
+                _facing = Facing.South;
+            if (turn == BestMove.TurnLeft && _facing == Facing.North)
+                _facing = Facing.West;
+            if (turn == BestMove.TurnLeft && _facing == Facing.South)
+                _facing = Facing.East;
+
+            if (turn == BestMove.TurnRight && _facing == Facing.East)
+                _facing = Facing.South;
+            if (turn == BestMove.TurnRight && _facing == Facing.West)
+                _facing = Facing.North;
+            if (turn == BestMove.TurnRight && _facing == Facing.North)
+                _facing = Facing.East;
+            if (turn == BestMove.TurnRight && _facing == Facing.South)
+                _facing = Facing.West;
         }
     }
 }

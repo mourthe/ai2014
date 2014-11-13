@@ -31,4 +31,12 @@
         FixBug = 100,
         Debug = 0
     };
+
+    public enum Facing
+    { 
+        East,
+        West,
+        North,
+        South
+    };
 }
