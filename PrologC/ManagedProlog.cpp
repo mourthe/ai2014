@@ -39,26 +39,9 @@ namespace ManagedProlog {
 			return PrologC::Prolog::isSafe(x,y);
 		}
 
-		static bool IsMart(int x, int y)
-		{
-			return PrologC::Prolog::isMart(x,y);
-		}
-
 		static void PutTerrain(int x, int y, int t)
 		{
 			PrologC::Prolog::putTerrain(x,y,t);
-		}
-
-		
-		static bool IsPokeCenter(int x, int y)
-		{
-			return PrologC::Prolog::isPokeCenter(x,y);
-		}
-
-		
-		static bool IsTrainer(int x, int y)
-		{
-			return PrologC::Prolog::isTrainer(x,y);
 		}
 
 		static void UpdFacing(char * direction)

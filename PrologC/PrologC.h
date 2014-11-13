@@ -191,44 +191,6 @@ namespace PrologC {
 			PlCall("rmvCockroach",av);
 		}
 		
-		static bool isMart(int x, int y)
-		{
-			
-			PlTermv av(2);
-			av[0] = x ;
-			av[1] = y ;
-			PlQuery q("mart",av);
-			bool resp = q.next_solution() == 1 ;
-			
-			return resp;
-		}
-
-		
-		static bool isPokeCenter(int x, int y)
-		{
-			
-			PlTermv av(2);
-			av[0] = x ;
-			av[1] = y ;
-			PlQuery q("pokeCenter",av);
-			bool resp = q.next_solution() == 1 ;
-			
-			return resp;
-		}
-
-		
-		static bool isTrainer(int x, int y)
-		{
-			
-			PlTermv av(2);
-			av[0] = x ;
-			av[1] = y ;
-			PlQuery q("trainer",av);
-			bool resp = q.next_solution() == 1 ;
-			
-			return resp;
-		}
-
 	private:
 
 
@@ -306,7 +268,7 @@ namespace PrologC {
 			for (int i = 0; i <= argIx; i++ , retIdx++)
 			{
 				int numArg = (int) strtol(args[i],NULL,0);
-				if(numArg == 0 &&  strcmp( args[i] , "0" ) != 0  ) // then is a string as value, a pokemon!
+				if(numArg == 0 &&  strcmp( args[i] , "0" ) != 0  ) 
 					ret[retIdx] = -1;
 				else
 					ret[retIdx] = numArg;
